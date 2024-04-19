@@ -1,5 +1,17 @@
+using API.Data;
+using API.Services.IRepositories;
+using API.Services.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<DataContext>(options => {
+    options.UseSqlite(builder.Configuration.GetConnectionString(
+        "DefaultConnection"));
+});
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -12,31 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.MapGet("/forecast", () =>
-{
-    var summaries = new Dictionary<string, int>{
-        {"Freezing", 0},
-        {"Bracing", 5},
-        {"Chilly", 10}
-    };
-    var forecast = summaries.Keys.Select(index =>
-        new Forecast
-        (
-            DateOnly.FromDateTime(DateTime.Now),
-            summaries[index],
-            index
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetForecast")
-.WithOpenApi();
+// app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
-
-record Forecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

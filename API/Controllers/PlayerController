@@ -1,0 +1,95 @@
+using Microsoft.AspNetCore.Mvc;
+using API.Models;
+using API.Services.IRepositories;
+
+namespace API.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class PlayerController: ControllerBase {
+    private readonly ILogger<PlayerController> _logger; // ILogger takes the type of the class as a parameter
+    private readonly IUnitOfWork _unitOfWork; // readonly means that the variable can only be assigned a value in the constructor
+
+    public PlayerController(
+        ILogger<PlayerController> logger,
+        IUnitOfWork unitOfWork
+        )
+    {
+        _logger = logger;
+        _unitOfWork = unitOfWork;
+    }
+
+    // create a new player
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(Player player) // 
+    {
+        if(ModelState.IsValid)
+        {
+            await _unitOfWork.Players.Add(player); // add the player to the database
+            await _unitOfWork.CompleteAsync(); // save the changes to the database
+
+            return CreatedAtAction("GetItem", new { id = player.Id }, player);
+        }
+
+        return new JsonResult("Something went wrong"){
+            StatusCode = 500
+        };
+    }
+
+    //get a single player
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetItem(int id)
+    {
+        var player = await _unitOfWork.Players.GetById(id);
+        if(player == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(player);
+    }
+
+    //get all players
+    [HttpGet]
+    public async Task<IActionResult> GetItems()
+    {
+        var players = await _unitOfWork.Players.All();
+        if(players == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(players);
+    }
+
+    //update a player
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateItem(int id, Player player)
+    {
+        if(id != player.Id)
+        {
+            return BadRequest();
+        }
+
+        await _unitOfWork.Players.Upsert(player, player.Id);
+        await _unitOfWork.CompleteAsync();
+
+        return NoContent();
+    }
+
+    //delete a player
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteItem(int id)
+    {
+        var player = await _unitOfWork.Players.GetById(id);
+        if(player == null)
+        {
+            return NotFound();
+        }
+
+        await _unitOfWork.Players.Delete(id);
+        await _unitOfWork.CompleteAsync();
+
+        return NoContent();
+    }
+}
