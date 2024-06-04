@@ -9,5 +9,5 @@ public interface IGenericRepository<T> where T : class // T is a generic type, i
 
     Task<bool> Delete(int id); 
 
-    Task<bool> Upsert(T entity);
+    Task<bool> Upsert(int id, T entity);
 }

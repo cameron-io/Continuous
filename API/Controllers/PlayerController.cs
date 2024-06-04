@@ -71,7 +71,7 @@ public class PlayerController: ControllerBase {
             return BadRequest();
         }
 
-        await _unitOfWork.Players.Upsert(player, player.Id);
+        await _unitOfWork.Players.Upsert(player.Id, player);
         await _unitOfWork.CompleteAsync();
 
         return NoContent();
