@@ -8,7 +8,7 @@ public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free 
     private readonly DataContext _context;
     private readonly ILogger _logger;
 
-    public IPlayerRepository Players { get; private set; }
+    public IUserRepository Users { get; private set; }
 
     // constructor will take the context and logger factory as parameters
     public UnitOfWork(
@@ -19,7 +19,7 @@ public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free 
         _context = context;
         _logger = loggerFactory.CreateLogger("logs");
 
-        Players = new PlayerRepository(_context, _logger);
+        Users = new UserRepository(_context, _logger);
     }
 
     public async Task CompleteAsync()

@@ -77,7 +77,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 }
 
 
-    public Task<bool> Upsert(T entity)
+    public Task<bool> Upsert(int id, T entity)
     {
         throw new NotImplementedException();
     }

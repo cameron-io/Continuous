@@ -5,28 +5,28 @@ using API.Services.IRepositories;
 
 namespace API.Services.Repositories;
 
-public class PlayerRepository : IPlayerRepository
+public class UserRepository : IUserRepository
 {
     protected DataContext _context;
-    protected DbSet<Player> dbSet;
+    protected DbSet<User> dbSet;
     protected readonly ILogger _logger;
 
-    public PlayerRepository(
+    public UserRepository(
         DataContext context,
         ILogger logger
     )
     {
         _context = context;
         _logger = logger;
-        this.dbSet = _context.Set<Player>();
+        this.dbSet = _context.Set<User>();
     }
 
-    public virtual async Task<IEnumerable<Player>> All() // virtual means that this method can be overriden by a class that inherits from this class
+    public virtual async Task<IEnumerable<User>> All() // virtual means that this method can be overriden by a class that inherits from this class
     {
         return await dbSet.ToListAsync();
     }
 
-    public  virtual async Task<Player?> GetById(int id)
+    public  virtual async Task<User?> GetById(int id)
     {
         try
         {
@@ -39,7 +39,7 @@ public class PlayerRepository : IPlayerRepository
         }
     }
 
-    public virtual async  Task<bool> Add(Player entity)
+    public virtual async  Task<bool> Add(User entity)
     {
         try
         {
@@ -76,7 +76,7 @@ public class PlayerRepository : IPlayerRepository
         }
     }
 
-    public Task<bool> Upsert(Player entity)
+    public Task<bool> Upsert(int id, User entity)
     {
         throw new NotImplementedException();
     }
