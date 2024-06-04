@@ -5,28 +5,28 @@ using API.Services.IRepositories;
 
 namespace API.Services.Repositories;
 
-public class UserRepository : IUserRepository
+public class AccountRepository : IAccountRepository
 {
     protected DataContext _context;
-    protected DbSet<User> dbSet;
+    protected DbSet<Account> dbSet;
     protected readonly ILogger _logger;
 
-    public UserRepository(
+    public AccountRepository(
         DataContext context,
         ILogger logger
     )
     {
         _context = context;
         _logger = logger;
-        this.dbSet = _context.Set<User>();
+        this.dbSet = _context.Set<Account>();
     }
 
-    public virtual async Task<IEnumerable<User>> All() // virtual means that this method can be overriden by a class that inherits from this class
+    public virtual async Task<IEnumerable<Account>> All() // virtual means that this method can be overriden by a class that inherits from this class
     {
         return await dbSet.ToListAsync();
     }
 
-    public  virtual async Task<User?> GetById(int id)
+    public  virtual async Task<Account?> GetById(int id)
     {
         try
         {
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public virtual async  Task<bool> Add(User entity)
+    public virtual async  Task<bool> Add(Account entity)
     {
         try
         {
@@ -76,7 +76,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public Task<bool> Upsert(int id, User entity)
+    public Task<bool> Upsert(int id, Account entity)
     {
         throw new NotImplementedException();
     }

@@ -6,12 +6,12 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController: ControllerBase {
-    private readonly ILogger<UserController> _logger; // ILogger takes the type of the class as a parameter
+public class AccountController: ControllerBase {
+    private readonly ILogger<AccountController> _logger; // ILogger takes the type of the class as a parameter
     private readonly IUnitOfWork _unitOfWork; // readonly means that the variable can only be assigned a value in the constructor
 
-    public UserController(
-        ILogger<UserController> logger,
+    public AccountController(
+        ILogger<AccountController> logger,
         IUnitOfWork unitOfWork
         )
     {
@@ -21,11 +21,11 @@ public class UserController: ControllerBase {
 
     // create a new user
     [HttpPost]
-    public async Task<IActionResult> RegisterUser(User user) // 
+    public async Task<IActionResult> RegisterAccount(Account user) // 
     {
         if(ModelState.IsValid)
         {
-            await _unitOfWork.Users.Add(user); // add the user to the database
+            await _unitOfWork.Accounts.Add(user); // add the user to the database
             await _unitOfWork.CompleteAsync(); // save the changes to the database
 
             return CreatedAtAction("GetItem", new { id = user.Id }, user);
@@ -36,42 +36,16 @@ public class UserController: ControllerBase {
         };
     }
 
-    //get a single user
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetItem(int id)
-    {
-        var user = await _unitOfWork.Users.GetById(id);
-        if(user == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(user);
-    }
-
-    //get all users
-    [HttpGet]
-    public async Task<IActionResult> GetItems()
-    {
-        var users = await _unitOfWork.Users.All();
-        if(users == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(users);
-    }
-
     //update a user
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateItem(int id, User user)
+    public async Task<IActionResult> UpdateAccount(int id, Account user)
     {
         if(id != user.Id)
         {
             return BadRequest();
         }
 
-        await _unitOfWork.Users.Upsert(user.Id, user);
+        await _unitOfWork.Accounts.Upsert(user.Id, user);
         await _unitOfWork.CompleteAsync();
 
         return NoContent();
@@ -79,15 +53,15 @@ public class UserController: ControllerBase {
 
     //delete a user
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteItem(int id)
+    public async Task<IActionResult> DeleteAccount(int id)
     {
-        var user = await _unitOfWork.Users.GetById(id);
+        var user = await _unitOfWork.Accounts.GetById(id);
         if(user == null)
         {
             return NotFound();
         }
 
-        await _unitOfWork.Users.Delete(id);
+        await _unitOfWork.Accounts.Delete(id);
         await _unitOfWork.CompleteAsync();
 
         return NoContent();

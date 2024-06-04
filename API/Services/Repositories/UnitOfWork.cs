@@ -8,7 +8,7 @@ public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free 
     private readonly DataContext _context;
     private readonly ILogger _logger;
 
-    public IUserRepository Users { get; private set; }
+    public IAccountRepository Accounts { get; private set; }
 
     // constructor will take the context and logger factory as parameters
     public UnitOfWork(
@@ -19,7 +19,7 @@ public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free 
         _context = context;
         _logger = loggerFactory.CreateLogger("logs");
 
-        Users = new UserRepository(_context, _logger);
+        Accounts = new AccountRepository(_context, _logger);
     }
 
     public async Task CompleteAsync()
