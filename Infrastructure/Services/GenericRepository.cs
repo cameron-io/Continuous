@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using API.Data;
-using API.Services.IRepositories;
+using Microsoft.Extensions.Logging;
+using Infrastructure.Data;
+using Core.Interfaces;
 
-namespace API.Services.Repositories;
+namespace Infrastructure.Services;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using API.Models;
-using API.Services.IRepositories;
+using Core.Entities;
+using Core.Interfaces;
 
 namespace API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AccountController: ControllerBase {
     private readonly ILogger<AccountController> _logger; // ILogger takes the type of the class as a parameter
     private readonly IUnitOfWork _unitOfWork; // readonly means that the variable can only be assigned a value in the constructor
@@ -19,7 +19,6 @@ public class AccountController: ControllerBase {
         _unitOfWork = unitOfWork;
     }
 
-    // create a new user
     [HttpPost]
     public async Task<IActionResult> RegisterAccount(Account user) // 
     {
@@ -36,7 +35,6 @@ public class AccountController: ControllerBase {
         };
     }
 
-    //update a user
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAccount(int id, Account user)
     {
@@ -51,7 +49,6 @@ public class AccountController: ControllerBase {
         return NoContent();
     }
 
-    //delete a user
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAccount(int id)
     {

@@ -1,7 +1,8 @@
-using API.Data;
-using API.Services.IRepositories;
+using Microsoft.Extensions.Logging;
+using Infrastructure.Data;
+using Core.Interfaces;
 
-namespace API.Services.Repositories;
+namespace Infrastructure.Services;
 
 public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free unmanaged resources
 {

@@ -1,4 +1,4 @@
-namespace API.Services.IRepositories;
+namespace Core.Interfaces;
 
 public interface IGenericRepository<T> where T : class // T is a generic type, it means that it can be of any type
 {

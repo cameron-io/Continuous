@@ -1,4 +1,4 @@
-namespace API.Models;
+namespace Core.Entities;
 
 public class Account: BaseEntity
 {

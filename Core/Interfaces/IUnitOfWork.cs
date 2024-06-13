@@ -1,4 +1,4 @@
-namespace API.Services.IRepositories;
+namespace Core.Interfaces;
 
 /*
     The IUnitOfWork will be used to coordinate the work 

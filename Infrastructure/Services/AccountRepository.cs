@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using API.Data;
-using API.Models;
-using API.Services.IRepositories;
+using Microsoft.Extensions.Logging;
+using Infrastructure.Data;
+using Core.Entities;
+using Core.Interfaces;
 
-namespace API.Services.Repositories;
+namespace Infrastructure.Services;
 
 public class AccountRepository : IAccountRepository
 {

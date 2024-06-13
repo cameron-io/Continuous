@@ -1,6 +1,6 @@
-using API.Models;
+using Core.Entities;
 
-namespace API.Services.IRepositories;
+namespace Core.Interfaces;
 
 public interface IAccountRepository : IGenericRepository<Account>
 {
