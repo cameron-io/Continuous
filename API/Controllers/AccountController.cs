@@ -27,7 +27,7 @@ public class AccountController: ControllerBase {
             await _unitOfWork.Accounts.Add(user); // add the user to the database
             await _unitOfWork.CompleteAsync(); // save the changes to the database
 
-            return CreatedAtAction("GetItem", new { id = user.Id }, user);
+            return Created();
         }
 
         return new JsonResult("Something went wrong"){
