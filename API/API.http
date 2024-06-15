@@ -1,6 +1,13 @@
 @API_HostAddress = http://localhost:5285
 
-GET {{API_HostAddress}}/register/
+POST {{API_HostAddress}}/api/account
+Content-Type: application/json
 Accept: application/json
+
+{
+    "name": "tester_123!",
+    "email": "tester@mail.com",
+    "password": "some_Secret!123"
+}
 
 ###
