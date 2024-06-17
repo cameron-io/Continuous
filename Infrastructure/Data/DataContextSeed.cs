@@ -2,9 +2,9 @@ using System.Reflection;
 
 namespace Infrastructure.Data;
 
-public class StoreContextSeed
+public class DataContextSeed
 {
-    public static async Task SeedAsync(StoreContext context)
+    public static async Task SeedAsync(DataContext context)
     {
         var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 

@@ -38,7 +38,7 @@ using var scope = app.Services.CreateScope();
 
 var services = scope.ServiceProvider;
 
-var context = services.GetRequiredService<StoreContext>();
+var context = services.GetRequiredService<DataContext>();
 var identityContext = services.GetRequiredService<AppIdentityDbContext>();
 
 var userManager = services.GetRequiredService<UserManager<AppUser>>();
@@ -48,7 +48,7 @@ try
 {
     await context.Database.MigrateAsync();
     await identityContext.Database.MigrateAsync();
-    await StoreContextSeed.SeedAsync(context);
+    await DataContextSeed.SeedAsync(context);
     await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
 }
 catch (Exception ex)

@@ -17,13 +17,15 @@ namespace Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
-            modelBuilder.Entity("Core.Entities.Account", b =>
+            modelBuilder.Entity("Core.Entities.AppUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
@@ -32,15 +34,42 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Password")
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("AppUser");
                 });
 
             modelBuilder.Entity("Core.Entities.Comment", b =>
@@ -49,8 +78,17 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("CommentedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommenterId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommenterUsername")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -58,15 +96,12 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Text")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("CommenterId");
 
                     b.HasIndex("PostId");
 
@@ -82,7 +117,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("Current")
+                    b.Property<bool>("Current")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Degree")
@@ -158,40 +193,10 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Experience");
                 });
 
-            modelBuilder.Entity("Core.Entities.Like", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Like");
-                });
-
             modelBuilder.Entity("Core.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -206,9 +211,12 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -219,8 +227,8 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
@@ -238,7 +246,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Skills")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
@@ -252,7 +259,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId")
+                    b.HasIndex("AppUserId")
                         .IsUnique();
 
                     b.ToTable("Profiles");
@@ -296,13 +303,38 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Social");
                 });
 
+            modelBuilder.Entity("Core.Entities.UserLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TargetPostId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourceUserId");
+
+                    b.HasIndex("TargetPostId");
+
+                    b.ToTable("UserLike");
+                });
+
             modelBuilder.Entity("Core.Entities.Comment", b =>
                 {
-                    b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Core.Entities.AppUser", "Commenter")
+                        .WithMany("Comments")
+                        .HasForeignKey("CommenterId");
 
                     b.HasOne("Core.Entities.Post", "Post")
                         .WithMany("Comments")
@@ -310,7 +342,7 @@ namespace Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.Navigation("Commenter");
 
                     b.Navigation("Post");
                 });
@@ -337,45 +369,22 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("Core.Entities.Like", b =>
-                {
-                    b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("Core.Entities.Post", b =>
                 {
-                    b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Core.Entities.AppUser", "User")
+                        .WithMany("Post")
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Account");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Entities.Profile", b =>
                 {
-                    b.HasOne("Core.Entities.Account", "Account")
+                    b.HasOne("Core.Entities.AppUser", "AppUser")
                         .WithOne("Profile")
-                        .HasForeignKey("Core.Entities.Profile", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Core.Entities.Profile", "AppUserId");
 
-                    b.Navigation("Account");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Core.Entities.Social", b =>
@@ -389,28 +398,48 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("Core.Entities.Account", b =>
+            modelBuilder.Entity("Core.Entities.UserLike", b =>
                 {
+                    b.HasOne("Core.Entities.AppUser", "SourceUser")
+                        .WithMany("UserLikes")
+                        .HasForeignKey("SourceUserId");
+
+                    b.HasOne("Core.Entities.Post", "TargetPost")
+                        .WithMany("LikesByUsers")
+                        .HasForeignKey("TargetPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourceUser");
+
+                    b.Navigation("TargetPost");
+                });
+
+            modelBuilder.Entity("Core.Entities.AppUser", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Post");
+
                     b.Navigation("Profile");
+
+                    b.Navigation("UserLikes");
                 });
 
             modelBuilder.Entity("Core.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Likes");
+                    b.Navigation("LikesByUsers");
                 });
 
             modelBuilder.Entity("Core.Entities.Profile", b =>
                 {
-                    b.Navigation("Education")
-                        .IsRequired();
+                    b.Navigation("Education");
 
-                    b.Navigation("Experience")
-                        .IsRequired();
+                    b.Navigation("Experience");
 
-                    b.Navigation("Social")
-                        .IsRequired();
+                    b.Navigation("Social");
                 });
 #pragma warning restore 612, 618
         }

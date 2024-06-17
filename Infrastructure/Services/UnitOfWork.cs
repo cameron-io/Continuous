@@ -7,10 +7,10 @@ namespace Infrastructure.Services;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly StoreContext _context;
+    private readonly DataContext _context;
     private Hashtable _repositories;
 
-    public UnitOfWork(StoreContext context)
+    public UnitOfWork(DataContext context)
     {
         _context = context;
     }

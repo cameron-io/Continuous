@@ -1,9 +1,7 @@
 namespace Core.Entities;
 
-public class Profile: BaseEntity
+public class Profile : BaseEntity
 {
-    public required int AppUserId { get; set; } // Required foreign key property
-    public required AppUser AppUser { get; set; } = null!; // Required reference navigation to principal
 
     public string Status { get; set; }
     public List<string> Skills { get; set; } = [];
@@ -16,4 +14,7 @@ public class Profile: BaseEntity
     public Experience Experience { get; set; } = null!;
     public Education Education { get; set; } = null!;
     public Social Social { get; set; } = null!;
+
+    public required string AppUserId { get; set; } // Required foreign key property
+    public required AppUser AppUser { get; set; } = null!; // Required reference navigation to principal
 }

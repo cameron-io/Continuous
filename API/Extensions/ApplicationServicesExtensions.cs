@@ -4,19 +4,24 @@ using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions;
 
 public static class ApplicationServicesExtensions
 {
-    public static IServiceCollection AddApplicationServices(
-        this IServiceCollection services,
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services,
         IConfiguration config)
     {
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
-        services.AddDbContext<StoreContext>(opt =>
+        services.AddDbContext<DataContext>(opt =>
         {
             opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+        });
+        services.AddSingleton<IConnectionMultiplexer>(c => 
+        {
+            var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
+            return ConnectionMultiplexer.Connect(options);
         });
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

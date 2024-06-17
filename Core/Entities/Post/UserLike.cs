@@ -1,9 +1,10 @@
 namespace Core.Entities;
 
-public class UserLike
+public class UserLike : BaseEntity
 {
+    public Post TargetPost { get; set; } = null!;
+    public int TargetPostId { get; set; }
+    
     public AppUser SourceUser { get; set; } = null!;
-    public int SourceUserId { get; set; }
-    public AppUser TargetUser { get; set; } = null!;
-    public int TargetUserId { get; set; }
+    public string SourceUserId { get; set; }
 }
