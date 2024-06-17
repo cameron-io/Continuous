@@ -10,7 +10,7 @@ public class DataContext : DbContext {
     }
 
     // DbSets are used to query and save instances of entities to a database
-    public DbSet<Account> Accounts { get; set; }
+    public DbSet<AppUser> Users { get; set; }
     public DbSet<Profile> Profiles { get; set; }
     public DbSet<Post> Posts { get; set; }
 }

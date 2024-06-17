@@ -1,13 +1,17 @@
-namespace Core.Interfaces;
+using Core.Entities;
+using Core.Specifications;
 
-public interface IGenericRepository<T> where T : class // T is a generic type, it means that it can be of any type
+namespace Core.Interfaces
 {
-    Task<IEnumerable<T>> All(); // Task is a type that represents an asynchronous operation that can return a value
-    Task<T?> GetById(int id);
-
-    Task<bool> Add(T entity); // returns true if successful
-
-    Task<bool> Delete(int id); 
-
-    Task<bool> Upsert(int id, T entity);
+    public interface IGenericRepository<T> where T : BaseEntity
+    {
+        Task<T> GetByIdAsync(int id);
+        Task<IReadOnlyList<T>> ListAllAsync();
+        Task<T> GetEntityWithSpec(ISpecification<T> spec);
+        Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+        Task<int> CountAsync(ISpecification<T> spec);
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+    }
 }

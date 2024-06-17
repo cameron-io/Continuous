@@ -1,36 +1,44 @@
-using Microsoft.Extensions.Logging;
-using Infrastructure.Data;
+using System.Collections;
+using Core.Entities;
 using Core.Interfaces;
+using Infrastructure.Data;
 
 namespace Infrastructure.Services;
 
-public class UnitOfWork:IUnitOfWork, IDisposable // IDisposable is used to free unmanaged resources
+public class UnitOfWork : IUnitOfWork
 {
-    private readonly DataContext _context;
-    private readonly ILogger _logger;
+    private readonly StoreContext _context;
+    private Hashtable _repositories;
 
-    public IAccountRepository Accounts { get; private set; }
-
-    // constructor will take the context and logger factory as parameters
-    public UnitOfWork(
-        DataContext context,
-        ILoggerFactory loggerFactory
-    )
+    public UnitOfWork(StoreContext context)
     {
         _context = context;
-        _logger = loggerFactory.CreateLogger("logs");
-
-        Accounts = new AccountRepository(_context, _logger);
     }
 
-    public async Task CompleteAsync()
+    public async Task<int> Complete()
     {
-        await _context.SaveChangesAsync();
+        return await _context.SaveChangesAsync();
     }
 
-    public  void Dispose()
+    public void Dispose()
     {
         _context.Dispose();
     }
 
+    public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
+    {
+        if (_repositories == null) _repositories = new Hashtable();
+
+        var type = typeof(TEntity).Name;
+
+        if (!_repositories.ContainsKey(type))
+        {
+            var repositoryType = typeof(GenericRepository<>);
+            var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _context);
+
+            _repositories.Add(type, repositoryInstance);
+        }
+
+        return (IGenericRepository<TEntity>) _repositories[type];
+    }
 }

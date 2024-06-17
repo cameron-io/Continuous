@@ -1,30 +1,59 @@
+using API.Extensions;
+using API.Middleware;
+using Core.Entities;
 using Infrastructure.Data;
-using Core.Interfaces;
-using Infrastructure.Services;
+using Infrastructure.Data.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>(options => {
-    options.UseSqlite(builder.Configuration.GetConnectionString(
-        "DefaultConnection"));
-});
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// HTTP request pipeline.
+// Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
+
+using var scope = app.Services.CreateScope();
+
+var services = scope.ServiceProvider;
+
+var context = services.GetRequiredService<StoreContext>();
+var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+
+var userManager = services.GetRequiredService<UserManager<AppUser>>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync();
+    await identityContext.Database.MigrateAsync();
+    await StoreContextSeed.SeedAsync(context);
+    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "An error occured during migration");
+}
 
 app.Run();

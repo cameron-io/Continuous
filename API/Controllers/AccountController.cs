@@ -1,66 +1,95 @@
-using Microsoft.AspNetCore.Mvc;
+using API.Dtos.Account;
+using API.Errors;
+using API.Extensions;
+using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AccountController: ControllerBase {
-    private readonly ILogger<AccountController> _logger; // ILogger takes the type of the class as a parameter
-    private readonly IUnitOfWork _unitOfWork; // readonly means that the variable can only be assigned a value in the constructor
-
-    public AccountController(
-        ILogger<AccountController> logger,
-        IUnitOfWork unitOfWork
-        )
+public class AccountController : BaseApiController
+{
+    private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
+    private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+        ITokenService tokenService, IMapper mapper)
     {
-        _logger = logger;
-        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _tokenService = tokenService;
+        _signInManager = signInManager;
+        _userManager = userManager;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> RegisterAccount(Account user) // 
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        if(ModelState.IsValid)
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+
+        return new UserDto
         {
-            await _unitOfWork.Accounts.Add(user); // add the user to the database
-            await _unitOfWork.CompleteAsync(); // save the changes to the database
-
-            return Created();
-        }
-
-        return new JsonResult("Something went wrong"){
-            StatusCode = 500
+            Email = user.Email,
+            Token = _tokenService.CreateToken(user),
+            DisplayName = user.DisplayName
         };
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAccount(int id, Account user)
+    [HttpPost("login")]
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        if(id != user.Id)
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+        if (user == null) return Unauthorized(new ApiResponse(401));
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+        if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
+
+        return new UserDto
         {
-            return BadRequest();
-        }
-
-        await _unitOfWork.Accounts.Upsert(user.Id, user);
-        await _unitOfWork.CompleteAsync();
-
-        return NoContent();
+            Email = user.Email,
+            Token = _tokenService.CreateToken(user),
+            DisplayName = user.DisplayName
+        };
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAccount(int id)
+    [HttpPost("register")]
+    public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        var user = await _unitOfWork.Accounts.GetById(id);
-        if(user == null)
+        if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
         {
-            return NotFound();
+            return new BadRequestObjectResult(new ApiValidationErrorResponse 
+                { Errors = new[] { "Email address is in use" } });
         }
 
-        await _unitOfWork.Accounts.Delete(id);
-        await _unitOfWork.CompleteAsync();
+        var user = new AppUser
+        {
+            DisplayName = registerDto.DisplayName,
+            Email = registerDto.Email,
+            UserName = registerDto.Email
+        };
 
-        return NoContent();
+        var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+        if (!result.Succeeded) return BadRequest(new ApiResponse(400));
+
+        return new UserDto
+        {
+            DisplayName = user.DisplayName,
+            Token = _tokenService.CreateToken(user),
+            Email = user.Email
+        };
     }
+
+    [HttpGet("emailexists")]
+    public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+    {
+        return await _userManager.FindByEmailAsync(email) != null;
+    }
+
 }

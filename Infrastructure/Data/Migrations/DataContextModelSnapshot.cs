@@ -26,27 +26,19 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("Accounts");
                 });
@@ -57,30 +49,26 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PostId")
+                    b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("text")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("AccountId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comment");
                 });
@@ -98,22 +86,21 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Degree")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FieldOfStudy")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("From")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("School")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("To")
@@ -123,6 +110,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
 
                     b.ToTable("Education");
                 });
@@ -134,7 +124,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Company")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -147,11 +136,12 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("From")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("To")
@@ -162,7 +152,37 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
+
                     b.ToTable("Experience");
+                });
+
+            modelBuilder.Entity("Core.Entities.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Like");
                 });
 
             modelBuilder.Entity("Core.Entities.Post", b =>
@@ -171,24 +191,24 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("date")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Posts");
                 });
@@ -197,6 +217,9 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Bio")
@@ -208,15 +231,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("EducationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExperienceId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("GitHubUsername")
                         .HasColumnType("TEXT");
 
@@ -227,11 +241,7 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SocialId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -242,11 +252,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EducationId");
-
-                    b.HasIndex("ExperienceId");
-
-                    b.HasIndex("SocialId");
+                    b.HasIndex("AccountId")
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
@@ -269,6 +276,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("LinkedIn")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Twitter")
                         .HasColumnType("TEXT");
 
@@ -280,63 +290,127 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Social");
-                });
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
 
-            modelBuilder.Entity("Core.Entities.Account", b =>
-                {
-                    b.HasOne("Core.Entities.Post", null)
-                        .WithMany("likes")
-                        .HasForeignKey("PostId");
+                    b.ToTable("Social");
                 });
 
             modelBuilder.Entity("Core.Entities.Comment", b =>
                 {
-                    b.HasOne("Core.Entities.Post", null)
-                        .WithMany("comments")
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("Core.Entities.Account", "user")
+                    b.HasOne("Core.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.HasOne("Core.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("Core.Entities.Profile", b =>
+            modelBuilder.Entity("Core.Entities.Education", b =>
                 {
-                    b.HasOne("Core.Entities.Education", "Education")
-                        .WithMany()
-                        .HasForeignKey("EducationId")
+                    b.HasOne("Core.Entities.Profile", "Profile")
+                        .WithOne("Education")
+                        .HasForeignKey("Core.Entities.Education", "ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Experience", "Experience")
-                        .WithMany()
-                        .HasForeignKey("ExperienceId")
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Core.Entities.Experience", b =>
+                {
+                    b.HasOne("Core.Entities.Profile", "Profile")
+                        .WithOne("Experience")
+                        .HasForeignKey("Core.Entities.Experience", "ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Social", "Social")
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Core.Entities.Like", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("SocialId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Education");
+                    b.HasOne("Core.Entities.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Experience");
+                    b.Navigation("Account");
 
-                    b.Navigation("Social");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Core.Entities.Post", b =>
                 {
-                    b.Navigation("comments");
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("likes");
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Core.Entities.Profile", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithOne("Profile")
+                        .HasForeignKey("Core.Entities.Profile", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Core.Entities.Social", b =>
+                {
+                    b.HasOne("Core.Entities.Profile", "Profile")
+                        .WithOne("Social")
+                        .HasForeignKey("Core.Entities.Social", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Core.Entities.Account", b =>
+                {
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Core.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("Core.Entities.Profile", b =>
+                {
+                    b.Navigation("Education")
+                        .IsRequired();
+
+                    b.Navigation("Experience")
+                        .IsRequired();
+
+                    b.Navigation("Social")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

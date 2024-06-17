@@ -1,3 +1,5 @@
+using Core.Entities;
+
 namespace Core.Interfaces;
 
 /*
@@ -6,10 +8,8 @@ namespace Core.Interfaces;
     each repository. It will also have a method that will 
     save all the changes made to the database.
 */
-
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
-    IAccountRepository Accounts { get; } // we have only get because we don't want to set the repository. setting the repository will be done in the UnitOfWork class
-
-    Task CompleteAsync(); // this method will save all the changes made to the database
+    IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
+    Task<int> Complete();
 }
