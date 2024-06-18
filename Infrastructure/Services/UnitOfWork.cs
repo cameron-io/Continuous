@@ -5,15 +5,10 @@ using Infrastructure.Data;
 
 namespace Infrastructure.Services;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(DataContext context) : IUnitOfWork
 {
-    private readonly DataContext _context;
+    private readonly DataContext _context = context;
     private Hashtable _repositories;
-
-    public UnitOfWork(DataContext context)
-    {
-        _context = context;
-    }
 
     public async Task<int> Complete()
     {

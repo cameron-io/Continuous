@@ -4,24 +4,15 @@ using StackExchange.Redis;
 
 namespace Infrastructure.Services;
 
-public class ResponseCacheService : IResponseCacheService
+public class ResponseCacheService(IConnectionMultiplexer redis) : IResponseCacheService
 {
-    private readonly IDatabase _database;
-    public ResponseCacheService(IConnectionMultiplexer redis)
-    {
-        _database = redis.GetDatabase();
-    }
+    private readonly IDatabase _database = redis.GetDatabase();
 
     public async Task CacheResponseAsync(string cacheKey, object response, TimeSpan timeToLive)
     {
         if (response == null) return;
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-
-        var serialisedResponse = JsonSerializer.Serialize(response, options);
+        var serialisedResponse = JsonSerializer.Serialize(response, JsonSerializerOptionsProvider.GetOptions());
 
         await _database.StringSetAsync(cacheKey, serialisedResponse, timeToLive);
     }

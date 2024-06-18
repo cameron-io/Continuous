@@ -1,3 +1,4 @@
+using System.Net;
 using API.Dtos.Account;
 using API.Errors;
 using API.Extensions;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[ApiController]
+[Route("api/v1")]
 public class AccountController : BaseApiController
 {
     private readonly UserManager<AppUser> _userManager;
@@ -50,12 +53,13 @@ public class AccountController : BaseApiController
 
         if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
 
-        return new UserDto
-        {
-            Email = user.Email,
-            Token = _tokenService.CreateToken(user),
-            DisplayName = user.DisplayName
-        };
+        DateTime now = DateTime.Now;
+        Response.Cookies.Append("token", _tokenService.CreateToken(user), new CookieOptions {
+            Expires = now.AddHours(1),
+            HttpOnly = true
+        });
+
+        return Ok();
     }
 
     [HttpPost("register")]
@@ -64,7 +68,7 @@ public class AccountController : BaseApiController
         if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
         {
             return new BadRequestObjectResult(new ApiValidationErrorResponse 
-                { Errors = new[] { "Email address is in use" } });
+                { Errors = ["Email address is in use"] });
         }
 
         var user = new AppUser
@@ -78,12 +82,11 @@ public class AccountController : BaseApiController
 
         if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
-        return new UserDto
+        return await Login(new LoginDto
         {
-            DisplayName = user.DisplayName,
-            Token = _tokenService.CreateToken(user),
-            Email = user.Email
-        };
+            Email = registerDto.Email,
+            Password = registerDto.Password
+        });
     }
 
     [HttpGet("emailexists")]
