@@ -4,6 +4,8 @@ namespace API.Extensions;
 
 public static class SwaggerServiceExtensions
 {
+    private static readonly string[] bearer = ["Bearer"];
+
     public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -29,7 +31,8 @@ public static class SwaggerServiceExtensions
             var securityRequirement = new OpenApiSecurityRequirement
             {
                 {
-                    securitySchema, new[] {"Bearer"}
+                    securitySchema,
+                    bearer
                 }
             };
 

@@ -13,7 +13,7 @@ public static class IdentityServiceExtensions
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, 
         IConfiguration config)
     {
-        services.AddDbContext<AppIdentityDbContext>(opt =>
+        services.AddDbContext<IdentityDbContext>(opt =>
         {
             opt.UseSqlite(config.GetConnectionString("IdentityConnection"));
         });
@@ -22,7 +22,7 @@ public static class IdentityServiceExtensions
         {
             // add identity options here
         })
-        .AddEntityFrameworkStores<AppIdentityDbContext>()
+        .AddEntityFrameworkStores<IdentityDbContext>()
         .AddSignInManager<SignInManager<AppUser>>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

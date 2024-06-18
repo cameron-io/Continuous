@@ -1,8 +1,6 @@
-using System.Net;
 using API.Dtos.Account;
 using API.Errors;
 using API.Extensions;
-using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -13,20 +11,14 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/v1")]
-public class AccountController : BaseApiController
+public class AccountController(
+    UserManager<AppUser> userManager,
+    SignInManager<AppUser> signInManager,
+    ITokenService tokenService) : BaseApiController
 {
-    private readonly UserManager<AppUser> _userManager;
-    private readonly SignInManager<AppUser> _signInManager;
-    private readonly ITokenService _tokenService;
-    private readonly IMapper _mapper;
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-        ITokenService tokenService, IMapper mapper)
-    {
-        _mapper = mapper;
-        _tokenService = tokenService;
-        _signInManager = signInManager;
-        _userManager = userManager;
-    }
+    private readonly UserManager<AppUser> _userManager = userManager;
+    private readonly SignInManager<AppUser> _signInManager = signInManager;
+    private readonly ITokenService _tokenService = tokenService;
 
     [Authorize]
     [HttpGet]

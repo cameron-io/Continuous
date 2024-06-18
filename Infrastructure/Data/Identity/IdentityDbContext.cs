@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Identity;
 
-public class AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
+public class IdentityDbContext(DbContextOptions<IdentityDbContext> options)
     : IdentityDbContext<AppUser>(options)
 {
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
-        builder.Entity<AppUser>()
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<AppUser>()
             .ToTable("AppUser");
     }
 }

@@ -22,7 +22,7 @@ public class UnitOfWork(DataContext context) : IUnitOfWork
 
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
     {
-        if (_repositories == null) _repositories = new Hashtable();
+        _repositories ??= [];
 
         var type = typeof(TEntity).Name;
 

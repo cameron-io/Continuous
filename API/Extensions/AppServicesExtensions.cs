@@ -8,9 +8,9 @@ using StackExchange.Redis;
 
 namespace API.Extensions;
 
-public static class ApplicationServicesExtensions
+public static class AppServicesExtensions
 {
-    public static IServiceCollection AddApplicationServices(
+    public static IServiceCollection AddAppServices(
         this IServiceCollection services,
         IConfiguration config)
     {
@@ -27,7 +27,6 @@ public static class ApplicationServicesExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>
