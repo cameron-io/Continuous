@@ -1,6 +1,7 @@
-using Core.Entities;
+using Core.Data;
+using Core.Repositories;
 
-namespace Core.Interfaces;
+namespace Core.Services;
 
 /*
     The IUnitOfWork will be used to coordinate the work 

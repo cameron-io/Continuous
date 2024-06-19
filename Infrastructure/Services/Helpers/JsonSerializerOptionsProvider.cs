@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Services.Helpers;
 
 public sealed class JsonSerializerOptionsProvider
 {

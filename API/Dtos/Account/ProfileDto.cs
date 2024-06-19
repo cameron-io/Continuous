@@ -1,4 +1,4 @@
-using Core.Entities;
+using Core.Data;
 
 namespace API.Dtos.Account;
 

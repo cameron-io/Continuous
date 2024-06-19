@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Data;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data;
+namespace Infrastructure.Data.Context;
 
 public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {

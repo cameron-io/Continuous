@@ -1,4 +1,4 @@
-namespace Core.Entities;
+namespace Core.Data;
 
 public class Post: BaseEntity
 {

@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Core.Entities;
+using Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

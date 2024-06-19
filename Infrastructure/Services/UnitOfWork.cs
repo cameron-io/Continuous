@@ -1,7 +1,9 @@
 using System.Collections;
-using Core.Entities;
-using Core.Interfaces;
-using Infrastructure.Data;
+using Core.Data;
+using Core.Services;
+using Core.Repositories;
+using Infrastructure.Data.Context;
+using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
 

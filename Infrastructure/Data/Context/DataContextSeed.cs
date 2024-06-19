@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Infrastructure.Data;
+namespace Infrastructure.Data.Context;
 
 public class DataContextSeed
 {

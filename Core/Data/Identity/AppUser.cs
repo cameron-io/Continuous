@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Core.Entities;
+namespace Core.Data;
 
 public class AppUser : IdentityUser
 {
