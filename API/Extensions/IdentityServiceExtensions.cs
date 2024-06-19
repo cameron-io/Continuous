@@ -25,6 +25,7 @@ public static class IdentityServiceExtensions
             .AddJwtBearer(options =>
             {
                 var tokenKey = config["Token:Key"] ?? throw new Exception("Token:Key not found");
+                
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -37,10 +38,10 @@ public static class IdentityServiceExtensions
                 {
                     OnMessageReceived = context => 
                     {
-                        var accessToken = context.Request.Query["access_token"];
+                        var accessToken = context.Request.Cookies["token"];
 
                         var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        if (!string.IsNullOrEmpty(accessToken))
                         {
                             context.Token = accessToken;
                         }

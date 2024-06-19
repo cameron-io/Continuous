@@ -9,9 +9,8 @@ namespace Core.Services;
     each repository. It will also have a method that will 
     save all the changes made to the database.
 */
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
-    Task<bool> Complete();
-    bool HasChanges();
+    Task<int> Complete();
 }

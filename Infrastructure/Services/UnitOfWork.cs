@@ -12,16 +12,16 @@ public class UnitOfWork(DataContext context) : IUnitOfWork
     private readonly DataContext _context = context;
     private Hashtable _repositories;
 
-    public async Task<bool> Complete()
+    public async Task<int> Complete()
     {
-        return await _context.SaveChangesAsync() > 0;
+        return await _context.SaveChangesAsync();
     }
 
-    public bool HasChanges()
+    public void Dispose()
     {
-        return _context.ChangeTracker.HasChanges();
+        GC.SuppressFinalize(this);
     }
-    
+
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
     {
         _repositories ??= [];
