@@ -41,7 +41,7 @@ public class DataContextSeed
         var admin = new AppUser
         {
             UserName = "admin",
-            DisplayName = "Admin"
+            Name = "Admin"
         };
 
         await userManager.CreateAsync(admin, "Pa$$w0rd");

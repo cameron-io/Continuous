@@ -12,6 +12,7 @@ namespace Core.Repositories
         Task<int> CountAsync(ISpecification<T> spec);
         void Add(T entity);
         void Update(T entity);
+        void Upsert(T entity);
         void Delete(T entity);
     }
 }

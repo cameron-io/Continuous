@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/v1")]
+[Route("api")]
 public class AccountController(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
@@ -21,7 +21,7 @@ public class AccountController(
     private readonly ITokenService _tokenService = tokenService;
 
     [Authorize]
-    [HttpGet]
+    [HttpGet("auth")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
@@ -30,11 +30,11 @@ public class AccountController(
         {
             Email = user.Email,
             Token = _tokenService.CreateToken(user),
-            DisplayName = user.DisplayName
+            DisplayName = user.Name
         };
     }
 
-    [HttpPost("login")]
+    [HttpPost("auth")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -53,7 +53,7 @@ public class AccountController(
         return Ok();
     }
 
-    [HttpPost("register")]
+    [HttpPost("users")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
@@ -64,7 +64,7 @@ public class AccountController(
 
         var user = new AppUser
         {
-            DisplayName = registerDto.DisplayName,
+            Name = registerDto.Name,
             Email = registerDto.Email,
             UserName = registerDto.Email
         };

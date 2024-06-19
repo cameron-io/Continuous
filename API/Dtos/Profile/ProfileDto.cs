@@ -1,6 +1,6 @@
 using Core.Data;
 
-namespace API.Dtos.Account;
+namespace API.Dtos.Profile;
 
 public class ProfileDto
 {
@@ -12,7 +12,7 @@ public class ProfileDto
     public string Location { get; set; }
     public string Bio { get; set; }
     public string GitHubUsername { get; set; }
-    public required Experience Experience { get; set; }
-    public required Education Education { get; set; }
-    public required Social Social { get; set; }
+    public Experience Experience { get; set; }
+    public Education Education { get; set; }
+    public Social Social { get; set; }
 }
