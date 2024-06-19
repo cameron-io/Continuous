@@ -7,7 +7,7 @@ public class Comment : BaseEntity
     public DateTime CommentedAt { get; set; } = DateTime.UtcNow;
 
     // navigation properties
-    public string CommenterId { get; set; }
+    public int CommenterId { get; set; }
     public AppUser Commenter { get; set; } = null!;
     public int PostId { get; set; }
     public Post Post { get; set; } = null!;

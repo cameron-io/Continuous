@@ -15,6 +15,6 @@ public class Profile : BaseEntity
     public Education Education { get; set; } = null!;
     public Social Social { get; set; } = null!;
 
-    public required string AppUserId { get; set; } // Required foreign key property
+    public required int AppUserId { get; set; } // Required foreign key property
     public required AppUser AppUser { get; set; } = null!; // Required reference navigation to principal
 }

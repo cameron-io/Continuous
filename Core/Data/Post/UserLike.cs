@@ -6,5 +6,5 @@ public class UserLike : BaseEntity
     public int TargetPostId { get; set; }
     
     public AppUser SourceUser { get; set; } = null!;
-    public string SourceUserId { get; set; }
+    public int SourceUserId { get; set; }
 }

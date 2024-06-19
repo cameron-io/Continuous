@@ -7,6 +7,6 @@ public class Post: BaseEntity
     public List<UserLike> LikesByUsers { get; set; } = [];
     public List<Comment> Comments { get; } = [];
     
-    public required string UserId { get; set; } // Required foreign key property
+    public required int UserId { get; set; } // Required foreign key property
     public AppUser User { get; set; } = null!; // Required reference navigation to principal
 }

@@ -45,9 +45,8 @@ public class AccountController(
 
         if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
 
-        DateTime now = DateTime.Now;
         Response.Cookies.Append("token", _tokenService.CreateToken(user), new CookieOptions {
-            Expires = now.AddHours(1),
+            Expires = DateTime.Now.AddHours(1),
             HttpOnly = true
         });
 

@@ -1,46 +1,59 @@
-using System.Text;
+﻿using System.Text;
 using Core.Data;
 using Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions;
 
 public static class IdentityServiceExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, 
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services,
         IConfiguration config)
     {
-        services.AddDbContext<IdentityDbContext>(opt =>
+        services.AddIdentityCore<AppUser>(opt =>
         {
-            opt.UseSqlite(config.GetConnectionString("IdentityConnection"));
-        });
-
-        services.AddIdentityCore<AppUser>(opt => 
-        {
-            // add identity options here
+            opt.Password.RequireNonAlphanumeric = false;
         })
-        .AddEntityFrameworkStores<IdentityDbContext>()
-        .AddSignInManager<SignInManager<AppUser>>();
+            .AddRoles<AppRole>()
+            .AddRoleManager<RoleManager<AppRole>>()
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddEntityFrameworkStores<DataContext>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => 
+            .AddJwtBearer(options =>
             {
+                var tokenKey = config["Token:Key"] ?? throw new Exception("Token:Key not found");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey  = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(config["Token:Key"])),
-                    ValidIssuer = config["Token:Issuer"],
-                    ValidateIssuer = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+                    ValidateIssuer = false,
                     ValidateAudience = false
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context => 
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
-        services.AddAuthorization();
-
+        services.AddAuthorizationBuilder()
+            .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+            .AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+        
         return services;
     }
 }
