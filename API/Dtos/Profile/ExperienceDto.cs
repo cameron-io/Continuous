@@ -1,9 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace API.Dtos.Profile;
 
 public class ExperienceDto
 {
+    [Required]
     public required string Title { get; set; }
+    [Required]
     public required string Company { get; set; }
+    [Required]
     public required string From { get; set; }
     public string Location { get; set; }
     public DateTime? To { get; set; }

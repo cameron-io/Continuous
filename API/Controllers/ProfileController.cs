@@ -29,16 +29,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return new ProfileDto
-        {
-            Status = profile.Status,
-            Skills = profile.Skills,
-            Company = profile.Company,
-            Website = profile.Website,
-            Location = profile.Location,
-            Bio = profile.Bio,
-            GitHubUsername = profile.GitHubUsername,
-        };
+        return _mapper.Map<Core.Data.Profile, ProfileDto>(profile);
     }
 
     [Authorize]

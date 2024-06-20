@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations;
 using Core.Data;
 
 namespace API.Dtos.Profile;
 
 public class ProfileDto
 {
+    [Required]
     public required string Status { get; set; }
+    [Required]
     public List<string> Skills { get; set; } = [];
 
     public string Company { get; set; }
