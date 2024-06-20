@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
+using Core.Specifications;
 
-namespace Core.Specifications
+namespace Infrastructure.Specifications
 {
     public class BaseSpecification<T> : ISpecification<T>
     {

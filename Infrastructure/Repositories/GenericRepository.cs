@@ -3,7 +3,7 @@ using Core.Repositories;
 using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data.Context;
-using Infrastructure.Data;
+using Infrastructure.Specifications;
 
 namespace Infrastructure.Repositories;
 
