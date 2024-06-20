@@ -7,13 +7,10 @@ using Infrastructure.Data;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+public class GenericRepository<T>(DataContext context)
+    : IGenericRepository<T> where T : BaseEntity
 {
-    private readonly DataContext _context;
-    public GenericRepository(DataContext context)
-    {
-        _context = context;
-    }
+    private readonly DataContext _context = context;
 
     public void Add(T entity)
     {
@@ -28,7 +25,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public void Upsert(T entity)
     {
-        _context.Set<T>().Add(entity);
         _context.Entry(entity).State = entity.Id == 0 ?
                                    EntityState.Added :
                                    EntityState.Modified;

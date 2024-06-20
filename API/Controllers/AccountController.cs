@@ -16,20 +16,17 @@ public class AccountController(
     SignInManager<AppUser> signInManager,
     ITokenService tokenService) : BaseApiController
 {
-    private readonly UserManager<AppUser> _userManager = userManager;
-    private readonly SignInManager<AppUser> _signInManager = signInManager;
-    private readonly ITokenService _tokenService = tokenService;
 
     [Authorize]
     [HttpGet("auth")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+        var user = await userManager.FindByEmailFromClaimsPrincipal(User);
 
         return new UserDto
         {
             Email = user.Email,
-            Token = _tokenService.CreateToken(user),
+            Token = tokenService.CreateToken(user),
             DisplayName = user.Name
         };
     }
@@ -37,15 +34,15 @@ public class AccountController(
     [HttpPost("auth")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        var user = await userManager.FindByEmailAsync(loginDto.Email);
 
         if (user == null) return Unauthorized(new ApiResponse(401));
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+        var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
 
-        Response.Cookies.Append("token", _tokenService.CreateToken(user), new CookieOptions {
+        Response.Cookies.Append("token", tokenService.CreateToken(user), new CookieOptions {
             Expires = DateTime.Now.AddHours(3),
             HttpOnly = true
         });
@@ -69,7 +66,7 @@ public class AccountController(
             UserName = registerDto.Email
         };
 
-        var result = await _userManager.CreateAsync(user, registerDto.Password);
+        var result = await userManager.CreateAsync(user, registerDto.Password);
 
         if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
@@ -83,7 +80,7 @@ public class AccountController(
     [HttpGet("emailexists")]
     public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
     {
-        return await _userManager.FindByEmailAsync(email) != null;
+        return await userManager.FindByEmailAsync(email) != null;
     }
 
 }

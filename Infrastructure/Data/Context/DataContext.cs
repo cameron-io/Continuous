@@ -11,6 +11,10 @@ public class DataContext(DbContextOptions options) :
         AppUser, AppRole, int,  IdentityUserClaim<int>, AppUserRole, 
         IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>(options)
 {
+    public DbSet<Profile> Profiles { get; set; }
+    public DbSet<Education> Educations { get; set; }
+    public DbSet<Experience> Experiences { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -43,8 +47,4 @@ public class DataContext(DbContextOptions options) :
             }
         }
     }
-
-    public DbSet<Profile> Profiles { get; set; }
-    public DbSet<Education> Educations { get; set; }
-    public DbSet<Experience> Experiences { get; set; }
 }

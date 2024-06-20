@@ -7,19 +7,25 @@ using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
 
-public class UnitOfWork(DataContext context) : IUnitOfWork
+public class UnitOfWork(
+    DataContext context,
+    IProfileRepository profileRepository) : IUnitOfWork
 {
     private readonly DataContext _context = context;
     private Hashtable _repositories;
 
-    public async Task<int> Complete()
+    public async Task<bool> Complete()
     {
-        return await _context.SaveChangesAsync();
+        return await _context.SaveChangesAsync() > 0;
+    }
+    public bool HasChanges()
+    {
+        return _context.ChangeTracker.HasChanges();
     }
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
+        _context.Dispose();
     }
 
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
@@ -38,4 +44,6 @@ public class UnitOfWork(DataContext context) : IUnitOfWork
 
         return (IGenericRepository<TEntity>) _repositories[type];
     }
+
+    public IProfileRepository ProfileRepository => profileRepository;
 }

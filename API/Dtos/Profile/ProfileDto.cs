@@ -12,7 +12,7 @@ public class ProfileDto
     public string Location { get; set; }
     public string Bio { get; set; }
     public string GitHubUsername { get; set; }
-    public Experience Experience { get; set; }
-    public Education Education { get; set; }
-    public Social Social { get; set; }
+    public List<ExperienceDto> Experience { get; set; } = [];
+    public List<Education> Education { get; set; } = [];
+    public List<Social> Social { get; set; } = [];
 }

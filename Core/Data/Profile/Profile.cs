@@ -10,9 +10,9 @@ public class Profile : BaseEntity
     public string Location { get; set; }
     public string Bio { get; set; }
     public string GitHubUsername { get; set; }
-    public Experience Experience { get; set; } = null!;
-    public Education Education { get; set; } = null!;
-    public Social Social { get; set; } = null!;
+    public List<Experience> Experience { get; set; } = [];
+    public List<Education> Education { get; set; } = [];
+    public List<Social> Social { get; set; } = [];
 
     public int AppUserId { get; set; } // Required foreign key property
     public AppUser AppUser { get; set; } = null!; // Required reference navigation to principal

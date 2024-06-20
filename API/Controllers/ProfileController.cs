@@ -18,7 +18,6 @@ public class ProfileController(
 ) : BaseApiController
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly UserManager<AppUser> _userManager = userManager;
 
     [Authorize]
@@ -26,17 +25,27 @@ public class ProfileController(
     public async Task<ActionResult<ProfileDto>> GetMe()
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-        var profile = await _unitOfWork.Repository<Core.Data.Profile>().GetByIdAsync(user.Id);
+        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<ProfileDto>(profile);
+        return new ProfileDto
+        {
+            Status = profile.Status,
+            Skills = profile.Skills,
+            Company = profile.Company,
+            Website = profile.Website,
+            Location = profile.Location,
+            Bio = profile.Bio,
+            GitHubUsername = profile.GitHubUsername,
+        };
     }
 
     [Authorize]
     [HttpPost]
-    public ActionResult UpsertProfile(ProfileDto profileDto)
+    public async Task<ActionResult<ProfileDto>> CreateProfile(ProfileDto profileDto)
     {
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
         var profile = new Core.Data.Profile
         {
             Status = profileDto.Status,
@@ -45,11 +54,14 @@ public class ProfileController(
             Website = profileDto.Website,
             Location = profileDto.Location,
             Bio = profileDto.Bio,
-            GitHubUsername = profileDto.GitHubUsername
+            GitHubUsername = profileDto.GitHubUsername,
+            AppUserId = user.Id,
+            AppUser = user
         };
         
-        _unitOfWork.Repository<Core.Data.Profile>().Upsert(profile);
+        unitOfWork.ProfileRepository.Add(profile);
+        if (await unitOfWork.Complete()) return Ok();
 
-        return Ok();
+        return BadRequest("Failed to update user profile");
     }
 }

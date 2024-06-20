@@ -1,6 +1,6 @@
 
 .PHONY: dev
-dev:
+dev: reset-db
 	dotnet watch --no-hot-reload
 
 .PHONY: reset-db
