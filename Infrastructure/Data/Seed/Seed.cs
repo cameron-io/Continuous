@@ -3,15 +3,15 @@ using Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data.Context;
+namespace Infrastructure.Data.Seed;
 
-public class DataContextSeed
+public class Seed
 {
     public static async Task SeedAsync(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         if (await userManager.Users.AnyAsync()) return;
 
-        var userData = await File.ReadAllTextAsync("../Infrastructure/Data/Context/UserSeedData.json");
+        var userData = await File.ReadAllTextAsync("../Infrastructure/Data/Seed/UserSeed.json");
 
         var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
 

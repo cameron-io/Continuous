@@ -2,6 +2,7 @@ using API.Extensions;
 using API.Middleware;
 using Core.Data;
 using Infrastructure.Data.Context;
+using Infrastructure.Data.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +47,7 @@ var logger = services.GetRequiredService<ILogger<Program>>();
 try
 {
     await context.Database.MigrateAsync();
-    await DataContextSeed.SeedAsync(userManager, roleManager);
+    await Seed.SeedAsync(userManager, roleManager);
 }
 catch (Exception ex)
 {
