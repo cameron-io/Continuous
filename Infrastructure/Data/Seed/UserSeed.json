@@ -1,7 +1,7 @@
 [
     {
-        "UserName": "NetStacker",
-        "Name": "NetStacker",
-        "Email": "tester@netstacker.io"
+        "userName": "NetStacker",
+        "name": "NetStacker",
+        "email": "tester@netstacker.io"
     }
 ]

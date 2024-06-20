@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Core.Data;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,14 +8,15 @@ namespace Infrastructure.Data.Seed;
 
 public class Seed
 {
-    public static async Task SeedAsync(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    public static async Task SeedAsync(
+        UserManager<AppUser> userManager,
+        RoleManager<AppRole> roleManager)
     {
         if (await userManager.Users.AnyAsync()) return;
 
         var userData = await File.ReadAllTextAsync("../Infrastructure/Data/Seed/UserSeed.json");
 
-        var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
-
+        var options = JsonSerializerOptionsProvider.GetOptions();
         var users = JsonSerializer.Deserialize<List<AppUser>>(userData, options);
 
         if (users == null) return;
