@@ -54,7 +54,7 @@ public class ProfileController(
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<ProfileDto>> CreateProfile(ProfileDto profileDto)
+    public async Task<ActionResult<ProfileDto>> UpsertProfile(ProfileDto profileDto)
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
         var profile = new Core.Data.Profile
@@ -66,11 +66,61 @@ public class ProfileController(
             Location = profileDto.Location,
             Bio = profileDto.Bio,
             GitHubUsername = profileDto.GitHubUsername,
-            AppUserId = user.Id,
             AppUser = user
         };
         
-        unitOfWork.ProfileRepository.Add(profile);
+        unitOfWork.ProfileRepository.Upsert(profile);
+        if (await unitOfWork.Complete()) return Ok();
+
+        return BadRequest("Failed to update user profile");
+    }
+
+    [Authorize]
+    [HttpPut("experience")]
+    public async Task<ActionResult<ExperienceDto>> AddExperience(ExperienceDto experienceDto)
+    {
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+        
+        var experience = new Experience
+        {
+            
+            Title = experienceDto.Title,
+            Company = experienceDto.Company,
+            Location = experienceDto.Location,
+            From = experienceDto.From,
+            To = experienceDto.To == "" ? null : experienceDto.To,
+            Current = experienceDto.Current,
+            Description = experienceDto.Description,
+            Profile = profile
+        };
+        
+        unitOfWork.Repository<Experience>().Upsert(experience);
+        if (await unitOfWork.Complete()) return Ok();
+
+        return BadRequest("Failed to update user profile");
+    }
+    
+    [Authorize]
+    [HttpPut("education")]
+    public async Task<ActionResult<EducationDto>> AddEducation(EducationDto educationDto)
+    {
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+        
+        var education = new Education
+        {
+            School = educationDto.School,
+            Degree = educationDto.Degree,
+            FieldOfStudy = educationDto.FieldOfStudy,
+            From = educationDto.From,
+            To = educationDto.To == "" ? null : educationDto.To,
+            Current = educationDto.Current,
+            Description = educationDto.Description,
+            Profile = profile
+        };
+
+        unitOfWork.Repository<Education>().Upsert(education);
         if (await unitOfWork.Complete()) return Ok();
 
         return BadRequest("Failed to update user profile");

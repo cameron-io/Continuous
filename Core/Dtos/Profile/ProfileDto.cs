@@ -5,7 +5,7 @@ namespace Core.Dtos.Profile;
 
 public class ProfileDto
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     [Required]
     public required string Status { get; set; }
     [Required]
@@ -17,6 +17,6 @@ public class ProfileDto
     public string Bio { get; set; }
     public string GitHubUsername { get; set; }
     public List<ExperienceDto> Experience { get; set; } = [];
-    public List<Education> Education { get; set; } = [];
-    public List<Social> Social { get; set; } = [];
+    public List<EducationDto> Education { get; set; } = [];
+    public List<SocialDto> Social { get; set; } = [];
 }

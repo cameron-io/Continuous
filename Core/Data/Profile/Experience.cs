@@ -6,7 +6,7 @@ public class Experience: BaseEntity
     public string Company { get; set; }
     public string Location { get; set; }
     public string From { get; set; }
-    public DateTime? To { get; set; }
+    public string To { get; set; } = null;
     public bool Current { get; set; } = false;
     public string Description { get; set; }
     
