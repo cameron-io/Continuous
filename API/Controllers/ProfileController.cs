@@ -19,8 +19,7 @@ public class ProfileController(
 {
     private readonly IMapper _mapper = mapper;
     private readonly UserManager<AppUser> _userManager = userManager;
-    
-    [Authorize]
+
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<ProfileDto>>> GetAllProfiles()
     {
@@ -29,6 +28,16 @@ public class ProfileController(
         if (profiles == null) return NotFound();
 
         return Ok(profiles);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProfileDto>> GetAllProfiles(int id)
+    {
+        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(id);
+
+        if (profile == null) return NotFound();
+
+        return _mapper.Map<Core.Data.Profile, ProfileDto>(profile);
     }
 
     [Authorize]

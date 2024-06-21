@@ -5,6 +5,7 @@ namespace Core.Dtos.Profile;
 
 public class ProfileDto
 {
+    public required int Id { get; set; }
     [Required]
     public required string Status { get; set; }
     [Required]
