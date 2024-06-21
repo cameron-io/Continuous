@@ -31,7 +31,17 @@ public class ProfileController(
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProfileDto>> GetAllProfiles(int id)
+    public async Task<ActionResult<ProfileDto>> GetProfileById(int id)
+    {
+        var profile = await unitOfWork.ProfileRepository.GetByIdAsync(id);
+
+        if (profile == null) return NotFound();
+
+        return _mapper.Map<Core.Data.Profile, ProfileDto>(profile);
+    }
+    
+    [HttpGet("user/{id}")]
+    public async Task<ActionResult<ProfileDto>> GetByUserId(int id)
     {
         var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(id);
 

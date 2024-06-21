@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Core.Data;
+using Core.Dtos.Account;
 
 namespace Core.Dtos.Profile;
 
@@ -19,4 +19,5 @@ public class ProfileDto
     public List<ExperienceDto> Experience { get; set; } = [];
     public List<EducationDto> Education { get; set; } = [];
     public List<SocialDto> Social { get; set; } = [];
+    public UserDto User { get; set; }
 }
