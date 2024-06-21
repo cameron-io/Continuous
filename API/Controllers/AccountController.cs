@@ -82,5 +82,16 @@ public class AccountController(
     {
         return await userManager.FindByEmailAsync(email) != null;
     }
+    
+    [HttpDelete("account")]
+    public async Task<ActionResult<bool>> DeleteAccount()
+    {
+        var user = await userManager.FindByEmailFromClaimsPrincipal(User);
+        var result = await userManager.DeleteAsync(user);
+        
+        if (!result.Succeeded) return BadRequest(new ApiResponse(400));
+
+        return NoContent();
+    }
 
 }

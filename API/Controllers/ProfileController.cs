@@ -125,4 +125,26 @@ public class ProfileController(
 
         return BadRequest("Failed to update user profile");
     }
+
+    [Authorize]
+    [HttpDelete("experience/{id}")]
+    public async Task<ActionResult<ExperienceDto>> DeleteExperience(int id)
+    {
+        var experience = await unitOfWork.Repository<Experience>().GetByIdAsync(id);
+        unitOfWork.Repository<Experience>().Delete(experience);
+        if (await unitOfWork.Complete()) return Ok();
+
+        return BadRequest("Failed to update user profile");
+    }
+
+    [Authorize]
+    [HttpDelete("education/{id}")]
+    public async Task<ActionResult<EducationDto>> DeleteEducation(int id)
+    {
+        var education = await unitOfWork.Repository<Education>().GetByIdAsync(id);
+        unitOfWork.Repository<Education>().Delete(education);
+        if (await unitOfWork.Complete()) return Ok();
+
+        return BadRequest("Failed to update user profile");
+    }
 }
