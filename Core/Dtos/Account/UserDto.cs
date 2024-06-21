@@ -1,4 +1,4 @@
-namespace API.Dtos.Account;
+namespace Core.Dtos.Account;
 
 public class UserDto
 {

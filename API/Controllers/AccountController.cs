@@ -1,4 +1,4 @@
-using API.Dtos.Account;
+using Core.Dtos.Account;
 using API.Errors;
 using API.Extensions;
 using Core.Data;

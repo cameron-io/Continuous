@@ -1,5 +1,5 @@
 using AutoMapper;
-using API.Dtos.Profile;
+using Core.Dtos.Profile;
 using API.Extensions;
 using Core.Data;
 using Core.Services;
@@ -19,6 +19,17 @@ public class ProfileController(
 {
     private readonly IMapper _mapper = mapper;
     private readonly UserManager<AppUser> _userManager = userManager;
+    
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<ProfileDto>>> GetAllProfiles()
+    {
+        var profiles = await unitOfWork.ProfileRepository.GetAllAsync();
+
+        if (profiles == null) return NotFound();
+
+        return Ok(profiles);
+    }
 
     [Authorize]
     [HttpGet("me")]

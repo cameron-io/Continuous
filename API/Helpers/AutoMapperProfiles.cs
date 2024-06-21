@@ -1,5 +1,5 @@
 using Core.Data;
-using API.Dtos.Profile;
+using Core.Dtos.Profile;
 
 namespace API.Helpers;
 
@@ -18,5 +18,8 @@ public class AutoMapperProfiles : AutoMapper.Profile
             .ForMember(d => d.Education, o => o.MapFrom(s => s.Education))
             .ForMember(d => d.Experience, o => o.MapFrom(s => s.Experience))
             .ForMember(d => d.Social, o => o.MapFrom(s => s.Social));
+        CreateMap<Experience, ExperienceDto>();
+        CreateMap<Education, EducationDto>();
+        CreateMap<Social, SocialDto>();
     }       
 }
