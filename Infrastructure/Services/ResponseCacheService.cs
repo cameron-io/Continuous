@@ -13,7 +13,8 @@ public class ResponseCacheService(IConnectionMultiplexer redis) : IResponseCache
     {
         if (response == null) return;
 
-        var serialisedResponse = JsonSerializer.Serialize(response, JsonSerializerOptionsProvider.GetOptions());
+        var serialisedResponse = JsonSerializer.Serialize(
+            response, JsonSerializerOptionsProvider.GetOptions());
 
         await _database.StringSetAsync(cacheKey, serialisedResponse, timeToLive);
     }

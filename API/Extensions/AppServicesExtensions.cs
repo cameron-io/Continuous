@@ -16,6 +16,8 @@ public static class AppServicesExtensions
         this IServiceCollection services,
         IConfiguration config)
     {
+        // Infrastructure
+
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
         services.AddDbContext<DataContext>(opt =>
         {
@@ -26,11 +28,26 @@ public static class AppServicesExtensions
             var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
             return ConnectionMultiplexer.Connect(options);
         });
+
+        // Services
+
+        services.AddCors(opt =>
+        {
+            opt.AddPolicy("CorsPolicy", policy => 
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+            });
+        });
+
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddScoped<IProfileRepository, ProfileRepository>();
+
+        // Configuration
+        
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>
@@ -47,14 +64,6 @@ public static class AppServicesExtensions
 
                 return new BadRequestObjectResult(errorResponse);
             };
-        });
-
-        services.AddCors(opt =>
-        {
-            opt.AddPolicy("CorsPolicy", policy => 
-            {
-                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
-            });
         });
 
         return services;
