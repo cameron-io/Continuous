@@ -1,4 +1,4 @@
-namespace API.Helpers;
+namespace API.Utilities;
 
 public class Pagination<T> where T : class
 {

@@ -2,7 +2,7 @@ using Entities.Data;
 using Application.Dtos.Account;
 using Application.Dtos.Profile;
 
-namespace API.Helpers;
+namespace API.Utilities;
 
 public class AutoMapperProfiles : AutoMapper.Profile
 {

@@ -3,7 +3,7 @@ using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace API.Helpers;
+namespace API.Utilities;
 
 public class CachedAttribute(int timeToLiveSeconds) : Attribute, IAsyncActionFilter
 {
