@@ -49,6 +49,15 @@ public class AccountController(
 
         return Ok();
     }
+    
+    [HttpPost("auth/logout")]
+    public ActionResult Logout()
+    {
+        Response.Cookies.Delete("token");
+
+        return Ok();
+    }
+
 
     [HttpPost("users")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
