@@ -5,13 +5,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Helpers;
 
-public class CachedAttribute : Attribute, IAsyncActionFilter
+public class CachedAttribute(int timeToLiveSeconds) : Attribute, IAsyncActionFilter
 {
-    private readonly int _timeToLiveSeconds;
-    public CachedAttribute(int timeToLiveSeconds)
-    {
-        _timeToLiveSeconds = timeToLiveSeconds;
-    }
+    private readonly int _timeToLiveSeconds = timeToLiveSeconds;
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
@@ -42,7 +38,7 @@ public class CachedAttribute : Attribute, IAsyncActionFilter
         }
     }
 
-    private string GenerateCacheKeyFromRequest(HttpRequest request)
+    private static string GenerateCacheKeyFromRequest(HttpRequest request)
     {
         var keyBuilder = new StringBuilder();
 

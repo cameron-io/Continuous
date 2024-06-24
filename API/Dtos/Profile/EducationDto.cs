@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Dtos.Profile;
+namespace API.Dtos.Profile;
 
 public class EducationDto
 {

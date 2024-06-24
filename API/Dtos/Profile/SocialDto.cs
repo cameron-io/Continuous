@@ -1,4 +1,4 @@
-namespace Core.Dtos.Profile;
+namespace API.Dtos.Profile;
 
 public class SocialDto
 {

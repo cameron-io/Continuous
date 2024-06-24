@@ -1,11 +1,11 @@
-using Core.Dtos.Account;
-using API.Errors;
-using API.Extensions;
-using Core.Data;
-using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Core.Data;
+using Core.Services;
+using API.Dtos.Account;
+using API.Errors;
+using API.Extensions;
 
 namespace API.Controllers;
 

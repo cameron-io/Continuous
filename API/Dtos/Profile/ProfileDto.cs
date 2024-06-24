@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Core.Dtos.Account;
+using API.Dtos.Account;
 
-namespace Core.Dtos.Profile;
+namespace API.Dtos.Profile;
 
 public class ProfileDto
 {
