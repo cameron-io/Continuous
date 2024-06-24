@@ -1,9 +1,9 @@
 using API.Errors;
-using Core.Services;
-using Core.Repositories;
+using Domain.Services;
+using Domain.Repositories;
 using Infrastructure.Data.Context;
 using Infrastructure.Repositories;
-using Infrastructure.Services;
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;

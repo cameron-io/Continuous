@@ -1,15 +1,15 @@
-using Core.Repositories;
+using Domain.Repositories;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class ProfileRepository(DataContext context)
-    : GenericRepository<Core.Data.Profile>(context), IProfileRepository
+    : GenericRepository<Entities.Data.Profile>(context), IProfileRepository
 {
     private readonly DataContext _context = context;
 
-    public async Task<IReadOnlyList<Core.Data.Profile>> GetAllAsync()
+    public async Task<IReadOnlyList<Entities.Data.Profile>> GetAllAsync()
     {
         var query = _context.Profiles
             .Include(x => x.AppUser)
@@ -21,7 +21,7 @@ public class ProfileRepository(DataContext context)
         return await query.ToListAsync();
     }
 
-    public override async Task<Core.Data.Profile> GetByIdAsync(int id)
+    public override async Task<Entities.Data.Profile> GetByIdAsync(int id)
     {
         var query = _context.Profiles
             .Where(x => x.Id == id)
@@ -32,7 +32,7 @@ public class ProfileRepository(DataContext context)
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<Core.Data.Profile> GetByUserIdAsync(int id)
+    public async Task<Entities.Data.Profile> GetByUserIdAsync(int id)
     {
         return await _context.Profiles
             .Where(x => x.AppUserId == id)

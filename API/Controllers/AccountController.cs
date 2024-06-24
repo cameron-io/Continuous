@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Core.Data;
-using Core.Services;
-using API.Dtos.Account;
+using Entities.Data;
+using Domain.Services;
+using Application.Dtos.Account;
 using API.Errors;
 using API.Extensions;
 
@@ -22,6 +22,8 @@ public class AccountController(
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await userManager.FindByEmailFromClaimsPrincipal(User);
+
+        if (user == null) return Unauthorized(new ApiResponse(401));
 
         return new UserDto
         {

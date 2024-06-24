@@ -1,6 +1,6 @@
-using Core.Data;
-using Core.Repositories;
-using Core.Specifications;
+using Entities.Data;
+using Domain.Repositories;
+using Domain.Specifications;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data.Context;
 using Infrastructure.Specifications;

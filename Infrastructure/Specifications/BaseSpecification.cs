@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Core.Specifications;
+using Domain.Specifications;
 
 namespace Infrastructure.Specifications
 {

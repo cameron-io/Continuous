@@ -1,0 +1,13 @@
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Entities.Data;
+
+public class AppUser : IdentityUser<int>
+{
+    public string Name { get; set; }
+    public Profile Profile { get; set; }
+    public List<Post> Post { get; set; }
+    public List<Comment> Comments { get; set; }
+    public List<UserLike> UserLikes { get; set; }
+    public ICollection<AppUserRole> UserRoles { get; set; } = [];
+}
