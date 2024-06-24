@@ -1,4 +1,4 @@
-Presentation -> Application Services -> Domain (eg. `IRepository`) -> Infrastructure -> Database & external systems
+Presentation (API) -> Application Services -> Domain (eg. `IRepository`) -> Infrastructure -> Database & external systems
 
 - Presentation Layer (closest to consumers)
 
