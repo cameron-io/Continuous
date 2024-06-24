@@ -12,50 +12,50 @@ public class GenericRepository<T>(DataContext context)
 {
     private readonly DataContext _context = context;
 
-    public void Add(T entity)
+    public virtual void Add(T entity)
     {
         _context.Set<T>().Add(entity);
     }
     
-    public void Update(T entity)
+    public virtual void Update(T entity)
     {
         _context.Set<T>().Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
     }
 
-    public void Upsert(T entity)
+    public virtual void Upsert(T entity)
     {
         _context.Entry(entity).State = entity.Id == 0 ?
                                    EntityState.Added :
                                    EntityState.Modified;
     }
     
-    public void Delete(T entity)
+    public virtual void Delete(T entity)
     {
         _context.Set<T>().Remove(entity);
     }
 
-    public async Task<int> CountAsync(ISpecification<T> spec)
+    public virtual async Task<int> CountAsync(ISpecification<T> spec)
     {
         return await ApplySpecification(spec).CountAsync();
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public virtual async Task<T> GetByIdAsync(int id)
     {
         return await _context.Set<T>().FindAsync(id);
     }
 
-    public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
+    public virtual async Task<T> GetEntityWithSpec(ISpecification<T> spec)
     {
         return await ApplySpecification(spec).FirstOrDefaultAsync();
     }
 
-    public async Task<IReadOnlyList<T>> ListAllAsync()
+    public virtual async Task<IReadOnlyList<T>> ListAllAsync()
     {
         return await _context.Set<T>().ToListAsync();
     }
 
-    public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+    public virtual async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
     {
         return await ApplySpecification(spec).ToListAsync();
     }

@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Core.Data;
-using Infrastructure.Helpers;
+using Infrastructure.Config;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

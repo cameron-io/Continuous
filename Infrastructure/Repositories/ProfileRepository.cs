@@ -1,33 +1,42 @@
 using Core.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data.Context;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Core.Dtos.Profile;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ProfileRepository(DataContext context, IMapper mapper)
+public class ProfileRepository(DataContext context)
     : GenericRepository<Core.Data.Profile>(context), IProfileRepository
 {
     private readonly DataContext _context = context;
-    
-    public async Task<IReadOnlyList<ProfileDto>> GetAllAsync()
+
+    public async Task<IReadOnlyList<Core.Data.Profile>> GetAllAsync()
     {
         var query = _context.Profiles
+            .Include(x => x.AppUser)
             .Include(x => x.Education)
             .Include(x => x.Experience)
             .Include(x => x.Social)
-            .AsQueryable()
-            .ProjectTo<ProfileDto>(mapper.ConfigurationProvider);
+            .AsQueryable();
         
         return await query.ToListAsync();
+    }
+
+    public override async Task<Core.Data.Profile> GetByIdAsync(int id)
+    {
+        var query = _context.Profiles
+            .Where(x => x.Id == id)
+            .Include(x => x.AppUser)
+            .Include(x => x.Education)
+            .Include(x => x.Experience)
+            .Include(x => x.Social);
+        return await query.FirstOrDefaultAsync();
     }
 
     public async Task<Core.Data.Profile> GetByUserIdAsync(int id)
     {
         return await _context.Profiles
             .Where(x => x.AppUserId == id)
+            .Include(x => x.AppUser)
             .Include(x => x.Education)
             .Include(x => x.Experience)
             .Include(x => x.Social)

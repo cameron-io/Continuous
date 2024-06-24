@@ -27,7 +27,7 @@ public class AccountController(
         {
             Email = user.Email,
             Token = tokenService.CreateToken(user),
-            DisplayName = user.Name
+            Name = user.Name
         };
     }
 

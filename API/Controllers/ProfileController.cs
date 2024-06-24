@@ -27,7 +27,9 @@ public class ProfileController(
 
         if (profiles == null) return NotFound();
 
-        return Ok(profiles);
+        return Ok(
+            _mapper.Map<IReadOnlyList<Core.Data.Profile>, IReadOnlyList<ProfileDto>>(profiles)
+        );
     }
     
     [HttpGet("{id}")]
