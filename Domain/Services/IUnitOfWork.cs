@@ -12,7 +12,6 @@ namespace Domain.Services;
 public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
-    IProfileRepository ProfileRepository {get;}
     Task<bool> Complete();
     bool HasChanges();
 }

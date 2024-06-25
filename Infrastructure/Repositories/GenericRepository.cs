@@ -45,7 +45,7 @@ public class GenericRepository<T>(DataContext context)
         return await _context.Set<T>().FindAsync(id);
     }
 
-    public virtual async Task<T> GetEntityWithSpec(ISpecification<T> spec)
+    public virtual async Task<T> GetEntityWithSpecAsync(ISpecification<T> spec)
     {
         return await ApplySpecification(spec).FirstOrDefaultAsync();
     }

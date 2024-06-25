@@ -14,7 +14,7 @@ namespace API.Controllers;
 public class ProfileController(
     UserManager<AppUser> userManager,
     IMapper mapper,
-    IUnitOfWork unitOfWork
+    IProfileService profileService
 ) : BaseApiController
 {
     private readonly IMapper _mapper = mapper;
@@ -23,7 +23,7 @@ public class ProfileController(
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<ProfileDto>>> GetAllProfiles()
     {
-        var profiles = await unitOfWork.ProfileRepository.GetAllAsync();
+        var profiles = await profileService.ListAllProfilesAsync();
 
         if (profiles == null) return NotFound();
 
@@ -35,7 +35,7 @@ public class ProfileController(
     [HttpGet("{id}")]
     public async Task<ActionResult<ProfileDto>> GetProfileById(int id)
     {
-        var profile = await unitOfWork.ProfileRepository.GetByIdAsync(id);
+        var profile = await profileService.GetProfileIdAsync(id);
 
         if (profile == null) return NotFound();
 
@@ -45,7 +45,7 @@ public class ProfileController(
     [HttpGet("user/{id}")]
     public async Task<ActionResult<ProfileDto>> GetByUserId(int id)
     {
-        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(id);
+        var profile = await profileService.GetProfileByUserIdAsync(id);
 
         if (profile == null) return NotFound();
 
@@ -57,7 +57,7 @@ public class ProfileController(
     public async Task<ActionResult<ProfileDto>> GetMe()
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+        var profile = await profileService.GetProfileByUserIdAsync(user.Id);
 
         if (profile == null) return NotFound();
 
@@ -74,8 +74,7 @@ public class ProfileController(
 
         profile.AppUser = user;
         
-        unitOfWork.ProfileRepository.Upsert(profile);
-        if (await unitOfWork.Complete()) return Ok();
+        if (await profileService.Upsert(profile)) return Ok();
 
         return BadRequest("Failed to update user profile");
     }
@@ -85,15 +84,14 @@ public class ProfileController(
     public async Task<ActionResult<ProfileDto>> AddExperience(ExperienceDto experienceDto)
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+        var profile = await profileService.GetProfileByUserIdAsync(user.Id);
         var experience = _mapper.Map<ExperienceDto, Experience>(experienceDto);
 
         experience.Profile = profile;
-        unitOfWork.Repository<Experience>().Upsert(experience);
 
-        if (await unitOfWork.Complete())
+        if (await profileService.UpsertExperience(experience))
         {
-            var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
@@ -104,15 +102,14 @@ public class ProfileController(
     public async Task<ActionResult<ProfileDto>> AddEducation(EducationDto educationDto)
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-        var profile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+        var profile = await profileService.GetProfileByUserIdAsync(user.Id);
         var education = _mapper.Map<EducationDto, Education>(educationDto);
 
         education.Profile = profile;
-        unitOfWork.Repository<Education>().Upsert(education);
-
-        if (await unitOfWork.Complete())
+        
+        if (await profileService.UpsertEducation(education))
         {
-            var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
@@ -122,13 +119,10 @@ public class ProfileController(
     [HttpDelete("experience/{id}")]
     public async Task<ActionResult<ProfileDto>> DeleteExperience(int id)
     {
-        var experience = await unitOfWork.Repository<Experience>().GetByIdAsync(id);
-        unitOfWork.Repository<Experience>().Delete(experience);
-
-        if (await unitOfWork.Complete())
+        if (await profileService.DeleteExperience(id))
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-            var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
@@ -138,13 +132,10 @@ public class ProfileController(
     [HttpDelete("education/{id}")]
     public async Task<ActionResult<ProfileDto>> DeleteEducation(int id)
     {
-        var education = await unitOfWork.Repository<Education>().GetByIdAsync(id);
-        unitOfWork.Repository<Education>().Delete(education);
-
-        if (await unitOfWork.Complete())
+        if (await profileService.DeleteEducation(id))
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-            var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
+            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");

@@ -41,10 +41,10 @@ public static class AppServicesExtensions
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped<IProfileRepository, ProfileRepository>();
+        services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         // Configuration
         

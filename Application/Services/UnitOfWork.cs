@@ -7,9 +7,7 @@ using Infrastructure.Repositories;
 
 namespace Application.Services;
 
-public class UnitOfWork(
-    DataContext context,
-    IProfileRepository profileRepository) : IUnitOfWork
+public class UnitOfWork(DataContext context) : IUnitOfWork
 {
     private readonly DataContext _context = context;
     private Hashtable _repositories;
@@ -44,6 +42,4 @@ public class UnitOfWork(
 
         return (IGenericRepository<TEntity>) _repositories[type];
     }
-
-    public IProfileRepository ProfileRepository => profileRepository;
 }
