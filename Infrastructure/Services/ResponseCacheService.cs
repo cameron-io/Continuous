@@ -3,7 +3,7 @@ using Domain.Services;
 using StackExchange.Redis;
 using Infrastructure.Config;
 
-namespace Application.Services;
+namespace Infrastructure.Services;
 
 public class ResponseCacheService(IConnectionMultiplexer redis) : IResponseCacheService
 {

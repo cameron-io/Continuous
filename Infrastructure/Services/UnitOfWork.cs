@@ -5,7 +5,7 @@ using Domain.Repositories;
 using Infrastructure.Data.Context;
 using Infrastructure.Repositories;
 
-namespace Application.Services;
+namespace Infrastructure.Services;
 
 public class UnitOfWork(DataContext context) : IUnitOfWork
 {
