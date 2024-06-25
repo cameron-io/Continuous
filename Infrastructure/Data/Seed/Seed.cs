@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Entities.Data;
+using Domain.Entities;
 using Infrastructure.Config;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

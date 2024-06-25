@@ -1,4 +1,4 @@
-using Entities.Data;
+using Domain.Entities;
 using Domain.Specifications;
 
 namespace Domain.Repositories

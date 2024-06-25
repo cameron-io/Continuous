@@ -1,5 +1,5 @@
 using System.Collections;
-using Entities.Data;
+using Domain.Entities;
 using Domain.Services;
 using Domain.Repositories;
 using Infrastructure.Data.Context;

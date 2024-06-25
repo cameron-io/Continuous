@@ -1,4 +1,4 @@
-namespace Entities.Data;
+namespace Domain.Entities;
 
 public class Social: BaseEntity
 {

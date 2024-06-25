@@ -1,4 +1,4 @@
-using Entities.Data;
+using Domain.Entities;
 using Application.Dtos.Account;
 using Application.Dtos.Profile;
 

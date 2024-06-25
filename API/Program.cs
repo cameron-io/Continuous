@@ -1,6 +1,6 @@
 using API.Extensions;
 using API.Middleware;
-using Entities.Data;
+using Domain.Entities;
 using Infrastructure.Data.Context;
 using Infrastructure.Data.Seed;
 using Microsoft.AspNetCore.Identity;

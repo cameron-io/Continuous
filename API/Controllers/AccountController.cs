@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Entities.Data;
+using Domain.Entities;
 using Domain.Services;
 using Application.Dtos.Account;
 using API.Errors;

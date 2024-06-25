@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Entities.Data;
+using Domain.Entities;
 using Domain.Services;
 using Application.Dtos.Profile;
 using API.Extensions;
@@ -28,7 +28,7 @@ public class ProfileController(
         if (profiles == null) return NotFound();
 
         return Ok(
-            _mapper.Map<IReadOnlyList<Entities.Data.Profile>, IReadOnlyList<ProfileDto>>(profiles)
+            _mapper.Map<IReadOnlyList<Domain.Entities.Profile>, IReadOnlyList<ProfileDto>>(profiles)
         );
     }
     
@@ -39,7 +39,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Entities.Data.Profile, ProfileDto>(profile);
+        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
     }
     
     [HttpGet("user/{id}")]
@@ -49,7 +49,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Entities.Data.Profile, ProfileDto>(profile);
+        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
     }
 
     [Authorize]
@@ -61,7 +61,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Entities.Data.Profile, ProfileDto>(profile);
+        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
     }
 
     [Authorize]
@@ -70,7 +70,7 @@ public class ProfileController(
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
 
-        var profile = _mapper.Map<ProfileDto, Entities.Data.Profile>(profileDto);
+        var profile = _mapper.Map<ProfileDto, Domain.Entities.Profile>(profileDto);
 
         profile.AppUser = user;
         
@@ -94,7 +94,7 @@ public class ProfileController(
         if (await unitOfWork.Complete())
         {
             var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
-            return _mapper.Map<Entities.Data.Profile, ProfileDto>(newProfile);
+            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -113,7 +113,7 @@ public class ProfileController(
         if (await unitOfWork.Complete())
         {
             var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
-            return _mapper.Map<Entities.Data.Profile, ProfileDto>(newProfile);
+            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -129,7 +129,7 @@ public class ProfileController(
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
-            return _mapper.Map<Entities.Data.Profile, ProfileDto>(newProfile);
+            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -145,7 +145,7 @@ public class ProfileController(
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await unitOfWork.ProfileRepository.GetByUserIdAsync(user.Id);
-            return _mapper.Map<Entities.Data.Profile, ProfileDto>(newProfile);
+            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
