@@ -1,7 +1,6 @@
-using System.Runtime.CompilerServices;
 using Domain.Entities;
 using Domain.Services;
-using Infrastructure.Specifications;
+using Application.Specifications;
 
 namespace Application.Services;
 

@@ -14,7 +14,7 @@ Presentation (API) -> Application Services -> Domain (eg. `IRepository`) -> Infr
     - Has Dto definitions of its own to be able to return data without exposing the domain entities.
     - Contains Application Services:
         - Services which are specific to the implementation of a domain model or which have no dependency on the domain model.
-        - A classic example of this would be sending and email based upon a state change or action in the domain.
+        - A classic example of this would be sending an email based upon a state change or action in the domain.
         - This is usually a requirement of the application itself, and is likely not specified by the domain model.
         - This can either be procedurally executed by an application service after a call to the domain service, or as an event raised from the domain service.
     - Bridge between Presentation Layer and Domain Layer.
