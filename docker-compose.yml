@@ -3,7 +3,7 @@ services:
   redis:
     image: redis:latest
     ports:
-      - 6379:6379
+      - "${REDIS_PORT}:${REDIS_PORT}"
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
@@ -11,23 +11,31 @@ services:
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
-      - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=root
-      - HTTP_PASSWORD=secret
+      REDIS_HOSTS: "local:redis:${REDIS_PORT}"
+      HTTP_USER: ${REDIS_CMD_USER}
+      HTTP_PASSWORD: ${REDIS_CMD_PASSWORD}
     ports:
-      - 8081:8081
+      - "${REDIS_CMD_PORT}:${REDIS_CMD_PORT}"
     depends_on:
       - redis
   
   db:
-    image: postgres
+    container_name: pg
+    image: postgres:latest
+    restart: always
     environment:
-      POSTGRES_PASSWORD: secret
-      POSTGRES_USER: appuser
-    ports:
-      - 5432:5432
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - postgres-data:/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -d ${DATABASE_NAME} -U ${DATABASE_USER}"]
+        interval: 30s
+        timeout: 5s
+        retries: 5
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
 
 volumes:
   redis-data:
