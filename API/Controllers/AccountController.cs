@@ -10,7 +10,7 @@ using API.Extensions;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/accounts")]
 public class AccountController(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
@@ -18,7 +18,7 @@ public class AccountController(
 {
 
     [Authorize]
-    [HttpGet("auth")]
+    [HttpGet("info")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await userManager.FindByEmailFromClaimsPrincipal(User);
@@ -33,7 +33,7 @@ public class AccountController(
         };
     }
 
-    [HttpPost("auth")]
+    [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await userManager.FindByEmailAsync(loginDto.Email);
@@ -52,7 +52,7 @@ public class AccountController(
         return Ok();
     }
     
-    [HttpPost("auth/logout")]
+    [HttpPost("logout")]
     public ActionResult Logout()
     {
         Response.Cookies.Delete("token");
@@ -61,7 +61,7 @@ public class AccountController(
     }
 
 
-    [HttpPost("users")]
+    [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
@@ -94,7 +94,7 @@ public class AccountController(
         return await userManager.FindByEmailAsync(email) != null;
     }
     
-    [HttpDelete("account")]
+    [HttpDelete]
     public async Task<ActionResult<bool>> DeleteAccount()
     {
         var user = await userManager.FindByEmailFromClaimsPrincipal(User);

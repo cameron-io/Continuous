@@ -10,7 +10,7 @@ using API.Extensions;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/profiles")]
 public class ProfileController(
     UserManager<AppUser> userManager,
     IMapper mapper,
