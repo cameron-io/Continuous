@@ -31,7 +31,7 @@ public class ProfileController(
             _mapper.Map<IReadOnlyList<Domain.Entities.Profile>, IReadOnlyList<ProfileDto>>(profiles)
         );
     }
-    
+
     [HttpGet("{id}")]
     public async Task<ActionResult<ProfileDto>> GetProfileById(int id)
     {
@@ -41,7 +41,7 @@ public class ProfileController(
 
         return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
     }
-    
+
     [HttpGet("user/{id}")]
     public async Task<ActionResult<ProfileDto>> GetByUserId(int id)
     {
@@ -73,8 +73,8 @@ public class ProfileController(
         var profile = _mapper.Map<ProfileDto, Domain.Entities.Profile>(profileDto);
 
         profile.AppUser = user;
-        
-        if (await profileService.Upsert(profile)) return Ok();
+
+        if (await profileService.Upsert(profile)) return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
 
         return BadRequest("Failed to update user profile");
     }
@@ -106,7 +106,7 @@ public class ProfileController(
         var education = _mapper.Map<EducationDto, Education>(educationDto);
 
         education.Profile = profile;
-        
+
         if (await profileService.UpsertEducation(education))
         {
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
