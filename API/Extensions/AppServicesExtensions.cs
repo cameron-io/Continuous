@@ -7,7 +7,6 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
-using Domain.Entities;
 
 namespace API.Extensions;
 
