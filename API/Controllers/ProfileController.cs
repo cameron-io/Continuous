@@ -74,7 +74,7 @@ public class ProfileController(
 
         profile.AppUser = user;
 
-        if (await profileService.Upsert(profile)) return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
+        if (await profileService.UpsertAsync(profile)) return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
 
         return BadRequest("Failed to update user profile");
     }
@@ -89,7 +89,7 @@ public class ProfileController(
 
         experience.Profile = profile;
 
-        if (await profileService.UpsertExperience(experience))
+        if (await profileService.UpsertExperienceAsync(experience))
         {
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
@@ -107,7 +107,7 @@ public class ProfileController(
 
         education.Profile = profile;
 
-        if (await profileService.UpsertEducation(education))
+        if (await profileService.UpsertEducationAsync(education))
         {
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
             return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
@@ -119,7 +119,7 @@ public class ProfileController(
     [HttpDelete("experience/{id}")]
     public async Task<ActionResult<ProfileDto>> DeleteExperience(int id)
     {
-        if (await profileService.DeleteExperience(id))
+        if (await profileService.DeleteExperienceAsync(id))
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
@@ -132,7 +132,7 @@ public class ProfileController(
     [HttpDelete("education/{id}")]
     public async Task<ActionResult<ProfileDto>> DeleteEducation(int id)
     {
-        if (await profileService.DeleteEducation(id))
+        if (await profileService.DeleteEducationAsync(id))
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);

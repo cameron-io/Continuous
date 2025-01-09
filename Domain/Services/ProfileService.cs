@@ -35,14 +35,14 @@ public class ProfileService(IUnitOfWork unitOfWork) : IProfileService
         return await _unitOfWork.Repository<Education>().GetByIdAsync(Id);
     }
 
-    public async Task<bool> Upsert(Profile profile)
+    public async Task<bool> UpsertAsync(Profile profile)
     {
         _unitOfWork.Repository<Profile>().Upsert(profile);
         if (await _unitOfWork.Complete()) return true;
         return false;
     }
 
-    public async Task<bool> DeleteExperience(int Id)
+    public async Task<bool> DeleteExperienceAsync(int Id)
     {
         var experience = await GetProfileExperienceByIdAsync(Id);
         _unitOfWork.Repository<Experience>().Delete(experience);
@@ -50,7 +50,7 @@ public class ProfileService(IUnitOfWork unitOfWork) : IProfileService
         return false;
     }
     
-    public async Task<bool> DeleteEducation(int Id)
+    public async Task<bool> DeleteEducationAsync(int Id)
     {
         var Education = await GetProfileEducationByIdAsync(Id);
         _unitOfWork.Repository<Education>().Delete(Education);
@@ -58,14 +58,14 @@ public class ProfileService(IUnitOfWork unitOfWork) : IProfileService
         return false;
     }
 
-    public async Task<bool> UpsertExperience(Experience experience)
+    public async Task<bool> UpsertExperienceAsync(Experience experience)
     {
         _unitOfWork.Repository<Experience>().Upsert(experience);
         if (await _unitOfWork.Complete()) return true;
         return false;
     }
 
-    public async Task<bool> UpsertEducation(Education education)
+    public async Task<bool> UpsertEducationAsync(Education education)
     {
         _unitOfWork.Repository<Education>().Upsert(education);
         if (await _unitOfWork.Complete()) return true;
