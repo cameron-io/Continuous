@@ -1,17 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dtos.Profile;
+namespace API.Dtos.Profile;
 
-public class ExperienceDto
+public class EducationDto
 {
     public int Id { get; set; }
     [Required]
-    public required string Title { get; set; }
+    public required string School { get; set; }
     [Required]
-    public required string Company { get; set; }
+    public required string Degree { get; set; }
+    [Required]
+    public required string FieldOfStudy { get; set; }
     [Required]
     public required string From { get; set; }
-    public string Location { get; set; }
     public string To { get; set; } = null;
     public bool Current { get; set; } = false;
     public string Description { get; set; }

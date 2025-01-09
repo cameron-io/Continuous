@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
 using Domain.Services;
-using Application.Dtos.Account;
+using API.Dtos.Account;
 using API.Errors;
 using API.Extensions;
 
@@ -16,7 +16,6 @@ public class AccountController(
     SignInManager<AppUser> signInManager,
     ITokenService tokenService) : BaseApiController
 {
-
     [Authorize]
     [HttpGet("info")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
@@ -51,7 +50,7 @@ public class AccountController(
 
         return Ok();
     }
-    
+
     [HttpPost("logout")]
     public ActionResult Logout()
     {
@@ -59,7 +58,6 @@ public class AccountController(
 
         return Ok();
     }
-
 
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -104,5 +102,4 @@ public class AccountController(
 
         return NoContent();
     }
-
 }

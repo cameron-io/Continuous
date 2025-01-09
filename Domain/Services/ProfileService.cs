@@ -1,8 +1,7 @@
 using Domain.Entities;
-using Domain.Services;
-using Application.Specifications;
+using Domain.Specifications;
 
-namespace Application.Services;
+namespace Domain.Services;
 
 public class ProfileService(IUnitOfWork unitOfWork) : IProfileService
 {

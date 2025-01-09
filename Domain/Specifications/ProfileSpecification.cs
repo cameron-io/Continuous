@@ -1,7 +1,6 @@
 using Domain.Entities;
-using Infrastructure.Specifications;
 
-namespace Application.Specifications;
+namespace Domain.Specifications;
 
 public class ProfileSpecification : BaseSpecification<Profile>
 {

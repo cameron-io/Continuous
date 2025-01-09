@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Services;
-using Application.Dtos.Profile;
+using API.Dtos.Profile;
 using API.Extensions;
 
 namespace API.Controllers;

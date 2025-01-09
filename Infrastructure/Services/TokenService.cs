@@ -6,7 +6,7 @@ using Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Services;
+namespace Infrastructure.Services;
 
 public class TokenService : ITokenService
 {

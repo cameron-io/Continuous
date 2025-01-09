@@ -1,6 +1,6 @@
 using Domain.Entities;
-using Application.Dtos.Account;
-using Application.Dtos.Profile;
+using API.Dtos.Account;
+using API.Dtos.Profile;
 
 namespace API.Utilities;
 

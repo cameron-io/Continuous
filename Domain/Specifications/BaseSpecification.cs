@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
-using Domain.Specifications;
 
-namespace Infrastructure.Specifications
+namespace Domain.Specifications
 {
     public class BaseSpecification<T> : ISpecification<T>
     {
