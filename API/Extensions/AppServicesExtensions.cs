@@ -7,6 +7,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Domain.Entities;
 
 namespace API.Extensions;
 
@@ -44,7 +45,7 @@ public static class AppServicesExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IProfileService, ProfileService>();
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped(typeof(ITokenService<>), typeof(TokenService<>));
 
         // Configuration
         

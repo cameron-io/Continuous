@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
-using Domain.Services;
+using Infrastructure.Services;
 using API.Dtos.Account;
 using API.Errors;
 using API.Extensions;
@@ -14,7 +14,7 @@ namespace API.Controllers;
 public class AccountController(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
-    ITokenService tokenService) : BaseApiController
+    ITokenService<AppUser> tokenService) : BaseApiController
 {
     [Authorize]
     [HttpGet("info")]
