@@ -16,7 +16,7 @@ public static class SwaggerServiceExtensions
             {
                 Description = "JWT Auth Bearer Scheme",
                 Name = "Authorisation",
-                In = ParameterLocation.Header,
+                In = ParameterLocation.Cookie,
                 Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",
                 Reference = new OpenApiReference
