@@ -1,6 +1,7 @@
 using API.Extensions;
 using API.Middleware;
 using Domain.Entities;
+using Domain.Services;
 using Infrastructure.Data.Context;
 using Infrastructure.Data.Seed;
 using Microsoft.AspNetCore.Identity;
@@ -37,17 +38,16 @@ using var scope = app.Services.CreateScope();
 
 var services = scope.ServiceProvider;
 
-var context = services.GetRequiredService<DataContext>();
-
+var dataContext = services.GetRequiredService<DataContext>();
 var userManager = services.GetRequiredService<UserManager<AppUser>>();
 var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-
+var profileService = services.GetRequiredService<IProfileService>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    await context.Database.MigrateAsync();
-    await Seed.SeedAsync(userManager, roleManager);
+    await dataContext.Database.MigrateAsync();
+    await Seed.SeedAsync(userManager, roleManager, profileService);
 }
 catch (Exception ex)
 {
