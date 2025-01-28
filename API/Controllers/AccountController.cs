@@ -14,7 +14,7 @@ namespace API.Controllers;
 public class AccountController(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
-    ITokenService<AppUser> tokenService) : BaseApiController
+    ITokenService<AppUser> tokenService) : ControllerBase
 {
     [Authorize]
     [HttpGet("info")]

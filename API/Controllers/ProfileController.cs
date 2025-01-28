@@ -15,7 +15,7 @@ public class ProfileController(
     UserManager<AppUser> userManager,
     IMapper mapper,
     IProfileService profileService
-) : BaseApiController
+) : ControllerBase
 {
     private readonly IMapper _mapper = mapper;
     private readonly UserManager<AppUser> _userManager = userManager;
