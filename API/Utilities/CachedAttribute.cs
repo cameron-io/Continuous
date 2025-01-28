@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Utilities;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class CachedAttribute(int timeToLiveSeconds) : Attribute, IAsyncActionFilter
 {
     private readonly int _timeToLiveSeconds = timeToLiveSeconds;
