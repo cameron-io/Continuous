@@ -21,9 +21,9 @@ public static class AppServicesExtensions
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
         services.AddDbContext<DataContext>(opt =>
         {
-            opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+            opt.UseNpgsql(config.GetConnectionString("PostgreSqlConnection"));
         });
-        services.AddSingleton<IConnectionMultiplexer>(c => 
+        services.AddSingleton<IConnectionMultiplexer>(c =>
         {
             var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
             return ConnectionMultiplexer.Connect(options);
@@ -33,7 +33,7 @@ public static class AppServicesExtensions
 
         services.AddCors(opt =>
         {
-            opt.AddPolicy("CorsPolicy", policy => 
+            opt.AddPolicy("CorsPolicy", policy =>
             {
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
             });
@@ -47,7 +47,7 @@ public static class AppServicesExtensions
         services.AddScoped(typeof(ITokenService<>), typeof(TokenService<>));
 
         // Configuration
-        
+
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>
