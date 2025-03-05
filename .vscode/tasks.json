@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Continuous.sln",
+                "${workspaceFolder}/DevLinkNET.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Continuous.sln",
+                "${workspaceFolder}/DevLinkNET.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -29,12 +29,7 @@
             "label": "watch",
             "command": "dotnet",
             "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "--project",
-                "${workspaceFolder}/Continuous.sln"
-            ],
+            "args": ["watch", "run", "--project", "${workspaceFolder}/DevLinkNET.sln"],
             "problemMatcher": "$msCompile"
         }
     ]
